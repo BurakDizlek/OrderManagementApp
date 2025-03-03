@@ -42,7 +42,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.logging)
-    implementation(libs.qos.logback)
+   //implementation(libs.qos.logback)
     implementation(libs.kotlinx.serialization)
     implementation(libs.koin.android)
     testImplementation(libs.junit)
