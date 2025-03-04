@@ -22,11 +22,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bd.data.model.Campaign
+import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.ui.components.ErrorView
+import com.bd.ordermanagementapp.ui.components.ProgressView
+import com.bd.ordermanagementapp.ui.extensions.largePadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
 import org.koin.androidx.compose.koinViewModel
 
@@ -39,21 +44,31 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
             viewModel.fetchCampaigns()
         }
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(DustyWhite),
     ) {
+        //Campaigns
+        Text(
+            stringResource(R.string.home_campaigns_title),
+            modifier = Modifier.largePadding(),
+            style = MaterialTheme.typography.titleMedium
+        )
+
         if (state.loadingCampaigns) {
-            Text("Loading")
+            ProgressView()
         }
         if (state.errorCampaigns?.isNotEmpty() == true) {
-            Text("Error: ${state.errorCampaigns}")
+            ErrorView(errorMessage = state.errorCampaigns.orEmpty()) {
+                viewModel.fetchCampaigns()
+            }
         }
         if (state.campaigns.isNotEmpty()) {
             HorizontalCarousel(state.campaigns)
         }
+
+        //Menu
     }
 }
 
