@@ -2,7 +2,8 @@ package com.bd.ordermanagementapp.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.data.repository.CampaignRepository
+import com.bd.data.model.ResultCodes
+import com.bd.data.repository.campaign.CampaignRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,8 +18,17 @@ class HomeViewModel(private val campaignRepository: CampaignRepository) : ViewMo
         viewModelScope.launch {
             _uiState.update { it.copy(loadingCampaigns = true) }
             try {
-                val data = campaignRepository.getAllCampaigns()
-                _uiState.update { it.copy(campaigns = data, loadingCampaigns = false) }
+                val result = campaignRepository.getAllCampaigns()
+                if (result.code == ResultCodes.SUCCESS) {
+                    _uiState.update { it.copy(campaigns = result.data, loadingCampaigns = false) }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorCampaigns = result.message,
+                            loadingCampaigns = false
+                        )
+                    }
+                }
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorCampaigns = e.message, loadingCampaigns = false) }
             }
