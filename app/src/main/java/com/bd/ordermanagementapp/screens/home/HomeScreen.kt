@@ -4,10 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,15 +26,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bd.data.model.Campaign
+import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
@@ -36,39 +46,86 @@ import com.bd.ordermanagementapp.ui.theme.DustyWhite
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
+fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValues) {
     val state by viewModel.uiState.collectAsState()
+    val menuListState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         if (state.campaigns.isEmpty()) {
             viewModel.fetchCampaigns()
         }
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DustyWhite),
-    ) {
-        //Campaigns
-        Text(
-            stringResource(R.string.home_campaigns_title),
-            modifier = Modifier.largePadding(),
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        if (state.loadingCampaigns) {
-            ProgressView()
+        if (state.menuItems.isEmpty()) {
+            viewModel.fetchMenuItems()
         }
-        if (state.errorCampaigns?.isNotEmpty() == true) {
-            ErrorView(errorMessage = state.errorCampaigns.orEmpty()) {
-                viewModel.fetchCampaigns()
+    }
+
+    // Auto-load more items when reaching the end of the list
+    LaunchedEffect(menuListState) {
+        snapshotFlow {
+            menuListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+        }.collect { lastVisibleItemIndex ->
+            if (lastVisibleItemIndex != null &&
+                lastVisibleItemIndex >= state.menuItems.size - 1 &&
+                state.hasMoreMenuItems &&
+                state.errorMenuItems == null
+            ) {
+                viewModel.fetchMenuItems()
             }
         }
-        if (state.campaigns.isNotEmpty()) {
-            HorizontalCarousel(state.campaigns)
+    }
+
+    LazyColumn(
+        state = menuListState, modifier = Modifier
+            .padding(padding)
+            .fillMaxSize()
+            .background(DustyWhite)
+    ) {
+        item {
+            //Campaigns
+            Text(
+                stringResource(R.string.home_campaigns_title),
+                modifier = Modifier.largePadding(),
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            if (state.loadingCampaigns) {
+                ProgressView()
+            }
+            if (state.errorCampaigns?.isNotEmpty() == true) {
+                ErrorView(errorMessage = state.errorCampaigns.orEmpty()) {
+                    viewModel.fetchCampaigns()
+                }
+            }
+            if (state.campaigns.isNotEmpty()) {
+                HorizontalCarousel(state.campaigns)
+            }
         }
 
         //Menu
+        items(state.menuItems) { item: MenuItem ->
+            Row(modifier = Modifier.padding(dimensionResource(R.dimen.space_small))) {
+                AsyncImage(
+                    model = item.imageUrl,
+                    contentDescription = item.name,
+                    modifier = Modifier.size(200.dp)
+                )
+                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.space_small)))
+                Text(text = item.name)
+            }
+        }
+        if (state.loadingMenuItems) {
+            item {
+                ProgressView()
+            }
+        }
+
+        if (state.errorMenuItems?.isNotEmpty() == true) {
+            item {
+                ErrorView(errorMessage = state.errorMenuItems.orEmpty()) {
+                    viewModel.fetchMenuItems()
+                }
+            }
+        }
     }
 }
 
@@ -86,8 +143,7 @@ fun HorizontalCarousel(campaigns: List<Campaign>) {
     ) { i ->
         val campaign = campaigns[i]
 
-        ElevatedCard(
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        ElevatedCard(elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             colors = CardDefaults.cardColors(
                 containerColor = White
             ),
@@ -95,8 +151,7 @@ fun HorizontalCarousel(campaigns: List<Campaign>) {
                 .fillMaxWidth()
                 .clickable {
                     //todo navigate campaign details!
-                }
-        ) {
+                }) {
             Column(modifier = Modifier.padding(16.dp)) {
                 AsyncImage(
                     model = campaign.imageUrl,
@@ -118,5 +173,5 @@ fun HorizontalCarousel(campaigns: List<Campaign>) {
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(padding = PaddingValues(16.dp))
 }

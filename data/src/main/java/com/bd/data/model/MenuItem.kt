@@ -1,5 +1,8 @@
 package com.bd.data.model
 
+import com.bd.data.concatenateUrl
+import com.bd.data.safeEnumValueOf
+import com.bd.network.NetworkConstants
 import com.bd.network.model.MenuItemDto
 
 
@@ -22,12 +25,18 @@ fun MenuItemDto.toMenuItem(): MenuItem {
         barcode = barcode.orEmpty(),
         name = name.orEmpty(),
         description = description.orEmpty(),
-        imageUrl = imageUrl.orEmpty(),
+        imageUrl = concatenateUrl(
+            base = NetworkConstants.BASE_URL, path = imageUrl.orEmpty()
+        ),
         lastPrice = lastPrice ?: 0.0,
         firstPrice = firstPrice ?: 0.0,
         currency = currency.orEmpty(),
         discount = discount ?: 0.0,
-        category = category?.map { categoryString -> Category.valueOf(categoryString) }
-            .orEmpty()
+        category = category?.map { categoryString ->
+            safeEnumValueOf(
+                categoryString,
+                Category.NOT_DEFINED
+            )
+        }.orEmpty()
     )
 }

@@ -3,5 +3,7 @@ package com.bd.data.model
 enum class Category {
     HAMBURGER,
     FAST_FOOD,
-    BEVERAGE
+    BEVERAGE,
+    DONER,
+    NOT_DEFINED
 }
