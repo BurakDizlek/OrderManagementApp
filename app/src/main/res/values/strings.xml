@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">OrderManagementApp</string>
+    <string name="home_campaigns_title">Campaigns</string>
+    <string name="error_view_try_again">Try Again</string>
+    <string name="error_view_title">Error</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="buy">Order Now</string>
 </resources>
