@@ -40,3 +40,18 @@ fun MenuItemDto.toMenuItem(): MenuItem {
         }.orEmpty()
     )
 }
+
+fun MenuItem?.orEmpty(): MenuItem {
+    return this ?: MenuItem(
+        id = 0,
+        barcode = "",
+        name = "",
+        description = "",
+        imageUrl = "",
+        lastPrice = 0.0,
+        firstPrice = 0.0,
+        currency = "",
+        discount = 0.0,
+        category = listOf()
+    )
+}

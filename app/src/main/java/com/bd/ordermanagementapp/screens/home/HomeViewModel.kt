@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
+import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.menu.MenuRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val campaignRepository: CampaignRepository,
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
@@ -82,5 +84,26 @@ class HomeViewModel(
 
     private fun handleMenuLoading(isLoading: Boolean) {
         _uiState.update { it.copy(loadingMenuItems = isLoading) }
+    }
+
+    fun addToCart(menuItemId: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(loadingCart = true, errorAddToCartMessage = null) }
+            try {
+                val result = cartRepository.addToCart(menuItemId = menuItemId)
+                if (result.code == ResultCodes.SUCCESS) {
+                    _uiState.update { it.copy(cart = result.data, loadingCart = false) }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorAddToCartMessage = result.message,
+                            loadingCart = false
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorAddToCartMessage = e.message, loadingCart = false) }
+            }
+        }
     }
 }

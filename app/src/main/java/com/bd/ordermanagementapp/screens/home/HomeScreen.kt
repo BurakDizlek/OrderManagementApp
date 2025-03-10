@@ -3,6 +3,7 @@ package com.bd.ordermanagementapp.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -84,65 +86,70 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValue
         }
     }
 
-    LazyColumn(
-        state = menuListState,
-        modifier = Modifier
-            .padding(padding)
-            .fillMaxSize()
-            .background(DustyWhite)
-    ) {
-        item {
-            //Campaigns
-            Text(
-                stringResource(R.string.home_campaigns_title),
-                modifier = Modifier.largePadding(),
-                style = MaterialTheme.typography.titleMedium
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = menuListState,
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .background(DustyWhite)
+        ) {
+            item {
+                //Campaigns
+                Text(
+                    stringResource(R.string.home_campaigns_title),
+                    modifier = Modifier.largePadding(),
+                    style = MaterialTheme.typography.titleMedium
+                )
 
-            if (state.loadingCampaigns) {
-                ProgressView()
-            }
-            if (state.errorCampaigns?.isNotEmpty() == true) {
-                ErrorView(errorMessage = state.errorCampaigns.orEmpty()) {
-                    viewModel.fetchCampaigns()
+                if (state.loadingCampaigns) {
+                    ProgressView()
+                }
+                if (state.errorCampaigns?.isNotEmpty() == true) {
+                    ErrorView(errorMessage = state.errorCampaigns.orEmpty()) {
+                        viewModel.fetchCampaigns()
+                    }
+                }
+                if (state.campaigns.isNotEmpty()) {
+                    HorizontalCarousel(state.campaigns)
                 }
             }
-            if (state.campaigns.isNotEmpty()) {
-                HorizontalCarousel(state.campaigns)
-            }
-        }
 
-        //Menu
-        itemsIndexed(state.menuItems) { index: Int, item: MenuItem ->
-            if (index % 2 == 0) {
-                Row {
-                    // First item in the row
-                    MenuItemView(item)
-                    if (index < state.menuItems.size - 1) {
-                        MenuItemView(state.menuItems[index + 1])
+            //Menu
+            itemsIndexed(state.menuItems) { index: Int, item: MenuItem ->
+                if (index % 2 == 0) {
+                    Row {
+                        // First item in the row
+                        MenuItemView(item, viewModel)
+                        if (index < state.menuItems.size - 1) {
+                            MenuItemView(state.menuItems[index + 1], viewModel)
+                        }
+                    }
+                }
+            }
+            if (state.loadingMenuItems) {
+                item {
+                    ProgressView()
+                }
+            }
+
+            if (state.errorMenuItems?.isNotEmpty() == true) {
+                item {
+                    ErrorView(errorMessage = state.errorMenuItems.orEmpty()) {
+                        viewModel.fetchMenuItems()
                     }
                 }
             }
         }
-        if (state.loadingMenuItems) {
-            item {
-                ProgressView()
-            }
-        }
-
-        if (state.errorMenuItems?.isNotEmpty() == true) {
-            item {
-                ErrorView(errorMessage = state.errorMenuItems.orEmpty()) {
-                    viewModel.fetchMenuItems()
-                }
-            }
+        if (state.loadingCart) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }
 
 
 @Composable
-fun RowScope.MenuItemView(item: MenuItem) {
+fun RowScope.MenuItemView(item: MenuItem, viewModel: HomeViewModel) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
         modifier = Modifier
@@ -183,8 +190,8 @@ fun RowScope.MenuItemView(item: MenuItem) {
         )
 
         IconButton(
-            onClick = {
-                // todo show a dialog, add to cart or direct order!
+            onClick = { //todo a dialog will be show here later!
+                viewModel.addToCart(item.id)
             }, modifier = Modifier
                 .smallPadding(includeBottom = true)
                 .clip(CircleShape)
