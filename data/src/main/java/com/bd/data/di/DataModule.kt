@@ -6,6 +6,7 @@ import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.cart.CartRepositoryImpl
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.repository.menu.MenuRepositoryImpl
+import com.bd.data.usecase.AddToCartUseCase
 import com.bd.network.di.networkModule
 import org.koin.dsl.module
 
@@ -14,4 +15,5 @@ val dataModule = module {
     single<CampaignRepository> { CampaignRepositoryImpl(get()) }
     single<MenuRepository> { MenuRepositoryImpl(get()) }
     single<CartRepository> { CartRepositoryImpl(get()) }
+    single { AddToCartUseCase(get()) }
 }

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
-import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.menu.MenuRepository
+import com.bd.data.usecase.AddToCartUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val campaignRepository: CampaignRepository,
     private val menuRepository: MenuRepository,
-    private val cartRepository: CartRepository
+    private val addToCartUseCase: AddToCartUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
@@ -86,23 +86,37 @@ class HomeViewModel(
         _uiState.update { it.copy(loadingMenuItems = isLoading) }
     }
 
-    fun addToCart(menuItemId: Int) {
+    fun onAddButtonClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = menuItemId) }
+    }
+
+    fun onOrderOrCartDecisionDialogDismiss() {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+    }
+
+    fun onOrderNowButtonClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+        //todo create order will be called here!
+    }
+
+    fun onErrorOkButtonClicked() {
+        _uiState.update { it.copy(errorOrderOrCart = null) }
+    }
+
+    fun onAddToCartClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
         viewModelScope.launch {
-            _uiState.update { it.copy(loadingCart = true, errorAddToCartMessage = null) }
-            try {
-                val result = cartRepository.addToCart(menuItemId = menuItemId)
-                if (result.code == ResultCodes.SUCCESS) {
-                    _uiState.update { it.copy(cart = result.data, loadingCart = false) }
-                } else {
-                    _uiState.update {
-                        it.copy(
-                            errorAddToCartMessage = result.message,
-                            loadingCart = false
-                        )
-                    }
+            _uiState.update { it.copy(loadingOrderOrCart = true) }
+            val result = addToCartUseCase(menuItemId = menuItemId)
+            if (result.code == ResultCodes.SUCCESS) {
+                _uiState.update { it.copy(cart = result.data, loadingOrderOrCart = false) }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        errorOrderOrCart = result.message,
+                        loadingOrderOrCart = false
+                    )
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(errorAddToCartMessage = e.message, loadingCart = false) }
             }
         }
     }

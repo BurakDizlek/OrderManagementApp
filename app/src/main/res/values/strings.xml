@@ -4,5 +4,9 @@
     <string name="error_view_try_again">Try Again</string>
     <string name="error_view_title">Error</string>
     <string name="add_to_cart">Add to Cart</string>
-    <string name="buy">Order Now</string>
+    <string name="order_now">Order Now</string>
+    <string name="decision_title">Decision</string>
+    <string name="cart_or_order_decision_message">Order now or add to cart?</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_confirm">OK</string>
 </resources>

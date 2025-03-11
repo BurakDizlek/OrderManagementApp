@@ -16,11 +16,3 @@ fun CartResponse.toCart(): Cart {
         currency = currency.orEmpty()
     )
 }
-
-fun Cart?.orEmpty(): Cart {
-    return this ?: Cart(
-        cartItems = listOf(),
-        totalPrice = 0.0,
-        currency = ""
-    )
-}

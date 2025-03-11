@@ -17,6 +17,7 @@ data class HomeUiViewState(
     val errorMenuItems: String? = null,
     //Add to cart
     val cart: Cart? = null,
-    val loadingCart: Boolean = false,
-    val errorAddToCartMessage: String? = null
+    val loadingOrderOrCart: Boolean = false,
+    val errorOrderOrCart: String? = null,
+    val orderOrCartDecisionMenuItemId: Int? = null
 )

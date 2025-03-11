@@ -54,6 +54,8 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.ui.components.DecisionDialog
+import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.extensions.largePadding
@@ -141,8 +143,29 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValue
                 }
             }
         }
-        if (state.loadingCart) {
+        if (state.loadingOrderOrCart) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+
+        state.errorOrderOrCart?.let { errorMessage ->
+            ErrorDialog(
+                errorMessage = errorMessage,
+                onDismiss = {
+                    viewModel.onErrorOkButtonClicked()
+                }
+            )
+        }
+
+        state.orderOrCartDecisionMenuItemId?.let { menuItemId ->
+            DecisionDialog(
+                title = stringResource(R.string.decision_title),
+                message = stringResource(R.string.cart_or_order_decision_message),
+                rightButtonClick = { viewModel.onAddToCartClicked(menuItemId = menuItemId) },
+                leftButtonClick = { viewModel.onOrderNowButtonClicked(menuItemId = menuItemId) },
+                onDismiss = { viewModel.onOrderOrCartDecisionDialogDismiss() },
+                rightButtonText = stringResource(R.string.add_to_cart),
+                leftButtonText = stringResource(R.string.order_now)
+            )
         }
     }
 }
@@ -190,8 +213,8 @@ fun RowScope.MenuItemView(item: MenuItem, viewModel: HomeViewModel) {
         )
 
         IconButton(
-            onClick = { //todo a dialog will be show here later!
-                viewModel.addToCart(item.id)
+            onClick = {
+                viewModel.onAddButtonClicked(item.id)
             }, modifier = Modifier
                 .smallPadding(includeBottom = true)
                 .clip(CircleShape)
@@ -219,7 +242,8 @@ fun HorizontalCarousel(campaigns: List<Campaign>) {
     ) { i ->
         val campaign = campaigns[i]
 
-        ElevatedCard(elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        ElevatedCard(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             colors = CardDefaults.cardColors(
                 containerColor = White
             ),

@@ -5,9 +5,9 @@ import com.bd.data.model.Cart
 
 interface CartRepository {
 
-    suspend fun getCart(): BaseResult<Cart>
+    suspend fun getCart(): BaseResult<Cart?>
 
-    suspend fun addToCart(menuItemId: Int): BaseResult<Cart>
+    suspend fun addToCart(menuItemId: Int): BaseResult<Cart?>
 
-    suspend fun deleteFromCart(menuItemId: Int): BaseResult<Cart>
+    suspend fun deleteFromCart(menuItemId: Int): BaseResult<Cart?>
 }
