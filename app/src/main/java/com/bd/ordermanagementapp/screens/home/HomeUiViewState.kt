@@ -1,6 +1,7 @@
 package com.bd.ordermanagementapp.screens.home
 
 import com.bd.data.model.Campaign
+import com.bd.data.model.Cart
 import com.bd.data.model.MenuItem
 
 data class HomeUiViewState(
@@ -13,5 +14,10 @@ data class HomeUiViewState(
     val menuItems: List<MenuItem> = listOf(),
     val loadingMenuItems: Boolean = false,
     val hasMoreMenuItems: Boolean = true,
-    val errorMenuItems: String? = null
+    val errorMenuItems: String? = null,
+    //Add to cart
+    val cart: Cart? = null,
+    val loadingOrderOrCart: Boolean = false,
+    val errorOrderOrCart: String? = null,
+    val orderOrCartDecisionMenuItemId: Int? = null
 )

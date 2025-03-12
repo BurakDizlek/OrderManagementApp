@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
 import com.bd.data.repository.menu.MenuRepository
+import com.bd.data.usecase.AddToCartUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val campaignRepository: CampaignRepository,
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
+    private val addToCartUseCase: AddToCartUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
@@ -82,5 +84,40 @@ class HomeViewModel(
 
     private fun handleMenuLoading(isLoading: Boolean) {
         _uiState.update { it.copy(loadingMenuItems = isLoading) }
+    }
+
+    fun onAddButtonClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = menuItemId) }
+    }
+
+    fun onOrderOrCartDecisionDialogDismiss() {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+    }
+
+    fun onOrderNowButtonClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+        //todo create order will be called here!
+    }
+
+    fun onErrorOkButtonClicked() {
+        _uiState.update { it.copy(errorOrderOrCart = null) }
+    }
+
+    fun onAddToCartClicked(menuItemId: Int) {
+        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+        viewModelScope.launch {
+            _uiState.update { it.copy(loadingOrderOrCart = true) }
+            val result = addToCartUseCase(menuItemId = menuItemId)
+            if (result.code == ResultCodes.SUCCESS) {
+                _uiState.update { it.copy(cart = result.data, loadingOrderOrCart = false) }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        errorOrderOrCart = result.message,
+                        loadingOrderOrCart = false
+                    )
+                }
+            }
+        }
     }
 }
