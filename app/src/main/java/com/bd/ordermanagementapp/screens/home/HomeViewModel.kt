@@ -2,10 +2,12 @@ package com.bd.ordermanagementapp.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.data.extensions.orZero
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.usecase.AddToCartUseCase
+import com.bd.ordermanagementapp.data.repository.BottomBarRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val campaignRepository: CampaignRepository,
     private val menuRepository: MenuRepository,
-    private val addToCartUseCase: AddToCartUseCase
+    private val addToCartUseCase: AddToCartUseCase,
+    private val bottomBarRepository: BottomBarRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
@@ -109,6 +112,7 @@ class HomeViewModel(
             _uiState.update { it.copy(loadingOrderOrCart = true) }
             val result = addToCartUseCase(menuItemId = menuItemId)
             if (result.code == ResultCodes.SUCCESS) {
+                bottomBarRepository.onCartCountChanged(result.data?.cartItems?.count().orZero())
                 _uiState.update { it.copy(cart = result.data, loadingOrderOrCart = false) }
             } else {
                 _uiState.update {

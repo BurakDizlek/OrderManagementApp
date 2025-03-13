@@ -1,4 +1,4 @@
-package com.bd.ordermanagementapp
+package com.bd.ordermanagementapp.screens.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

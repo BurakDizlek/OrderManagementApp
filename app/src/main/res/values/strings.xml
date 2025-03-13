@@ -12,4 +12,8 @@
     <string name="total_price_label">Total Price</string>
     <string name="order">Order</string>
     <string name="my_cart_title">My Cart</string>
+    <string name="home_bottom_bar_title">Home</string>
+    <string name="cart_bottom_bar_title">Cart</string>
+    <string name="orders_bottom_bar_title">Orders</string>
+    <string name="delivery_bottom_bar_title">Delivery</string>
 </resources>
