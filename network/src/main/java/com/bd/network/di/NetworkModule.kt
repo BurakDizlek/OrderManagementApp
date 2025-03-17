@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val networkModule = module {
     single { HttpLogger() }
-    single { AppHttpClient(get()).create() }
+    single { AppHttpClient(get(), get()).create() }
     single<CampaignService> { CampaignServiceImpl(get()) }
     single<MenuService> { MenuServiceImpl(get()) }
     single<CartService> { CartServiceImpl(get()) }
