@@ -44,7 +44,7 @@ class SessionManagerImpl(private val securePreferences: SecurePreferences) : Ses
 
     private fun saveUserNameAndType(token: String) {
         getJWT(token = token)?.let {
-            securePreferences.saveString(USER_NAME_KEY, it.userName)
+            securePreferences.saveString(USER_NAME_KEY, it.username)
             when (it.unit) {
                 CUSTOMER_UNIT_NAME -> {
                     securePreferences.saveString(USER_TYPE_KEY, UserType.CUSTOMER.name)
