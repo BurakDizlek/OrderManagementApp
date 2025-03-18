@@ -48,11 +48,13 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.Graphs
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
@@ -63,7 +65,11 @@ import com.bd.ordermanagementapp.ui.theme.DustyWhite
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValues) {
+fun HomeScreen(
+    viewModel: HomeViewModel = koinViewModel(),
+    navigationController: NavHostController,
+    padding: PaddingValues
+) {
     val state by viewModel.uiState.collectAsState()
     val menuListState = rememberLazyListState()
 
@@ -121,9 +127,13 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValue
                 if (index % 2 == 0) {
                     Row {
                         // First item in the row
-                        MenuItemView(item, viewModel)
+                        MenuItemView(item, viewModel, navigationController)
                         if (index < state.menuItems.size - 1) {
-                            MenuItemView(state.menuItems[index + 1], viewModel)
+                            MenuItemView(
+                                state.menuItems[index + 1],
+                                viewModel,
+                                navigationController
+                            )
                         }
                     }
                 }
@@ -171,7 +181,11 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel(), padding: PaddingValue
 
 
 @Composable
-fun RowScope.MenuItemView(item: MenuItem, viewModel: HomeViewModel) {
+fun RowScope.MenuItemView(
+    item: MenuItem,
+    viewModel: HomeViewModel,
+    navigationController: NavHostController
+) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
         modifier = Modifier
