@@ -38,15 +38,19 @@ fun BottomBar(navController: NavController, state: MainUiViewState) {
     val screens = state.bottomBarScreens
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    NavigationBar {
-        screens.forEach { screen ->
-            if (screen.isVisible) {
-                AddItem(
-                    screen = screen.screen,
-                    currentDestination = currentDestination,
-                    navController = navController,
-                    badgeCount = screen.badgeCount
-                )
+
+    val isBottomBarVisible = screens.any { it.screen.route == currentDestination?.route }
+    if (isBottomBarVisible) {
+        NavigationBar {
+            screens.forEach { screen ->
+                if (screen.isVisible) {
+                    AddItem(
+                        screen = screen.screen,
+                        currentDestination = currentDestination,
+                        navController = navController,
+                        badgeCount = screen.badgeCount
+                    )
+                }
             }
         }
     }

@@ -1,14 +1,15 @@
-package com.bd.ordermanagementapp.data.repository
+package com.bd.ordermanagementapp.data.manager
 
-import com.bd.ordermanagementapp.data.CustomerType
+import com.bd.core.session.SessionManager
+import com.bd.core.session.UserType
 import com.bd.ordermanagementapp.screens.main.BottomBarScreen
 import com.bd.ordermanagementapp.screens.main.BottomNavItem
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class BottomBarRepositoryImpl : BottomBarRepository {
-    private var customerType: CustomerType = CustomerType.NOT_DEFINED
+class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarManager {
+    private var userType: UserType = sessionManager.getUserType()
     private var cartCount: Int = 0
 
     private val _bottomBarOptionsFlow = MutableSharedFlow<List<BottomNavItem>>(replay = 1)
@@ -20,8 +21,8 @@ class BottomBarRepositoryImpl : BottomBarRepository {
         _bottomBarStartDestinationRoute.asSharedFlow()
 
     private fun getStartDestinationRoute(): String {
-        return when (customerType) {
-            CustomerType.RESTAURANT_MANAGER -> {
+        return when (userType) {
+            UserType.RESTAURANT_MANAGER -> {
                 BottomBarScreen.Delivery.route
             }
 
@@ -32,10 +33,10 @@ class BottomBarRepositoryImpl : BottomBarRepository {
     }
 
     private fun getBottomBarOptions(): List<BottomNavItem> {
-        val homeVisibility = customerType != CustomerType.RESTAURANT_MANAGER
-        val cartVisibility = customerType != CustomerType.RESTAURANT_MANAGER
-        val ordersVisibility = customerType != CustomerType.RESTAURANT_MANAGER
-        val deliveryVisibility = customerType == CustomerType.RESTAURANT_MANAGER
+        val homeVisibility = userType != UserType.RESTAURANT_MANAGER
+        val cartVisibility = userType != UserType.RESTAURANT_MANAGER
+        val ordersVisibility = userType != UserType.RESTAURANT_MANAGER
+        val deliveryVisibility = userType == UserType.RESTAURANT_MANAGER
 
         return listOf(
             BottomNavItem(BottomBarScreen.Home, homeVisibility),
@@ -50,8 +51,8 @@ class BottomBarRepositoryImpl : BottomBarRepository {
         _bottomBarOptionsFlow.emit(getBottomBarOptions())
     }
 
-    override suspend fun onCustomerTypeChanged(customerType: CustomerType) {
-        this.customerType = customerType
+    override suspend fun onUserTypeChanged(userType: UserType) {
+        this.userType = userType
         updateBottomBar()
     }
 

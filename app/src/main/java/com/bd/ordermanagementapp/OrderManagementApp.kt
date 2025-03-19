@@ -1,6 +1,7 @@
 package com.bd.ordermanagementapp
 
 import android.app.Application
+import com.bd.core.di.coreModule
 import com.bd.data.di.dataModule
 import com.bd.ordermanagementapp.di.appModule
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +16,7 @@ class OrderManagementApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@OrderManagementApp)
-            modules(appModule, dataModule)
+            modules(appModule, dataModule, coreModule)
         }
     }
 

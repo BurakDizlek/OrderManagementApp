@@ -23,3 +23,4 @@ rootProject.name = "OrderManagementApp"
 include(":app")
 include(":network")
 include(":data")
+include(":core")

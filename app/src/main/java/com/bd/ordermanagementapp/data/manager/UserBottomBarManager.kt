@@ -1,13 +1,13 @@
-package com.bd.ordermanagementapp.data.repository
+package com.bd.ordermanagementapp.data.manager
 
-import com.bd.ordermanagementapp.data.CustomerType
+import com.bd.core.session.UserType
 import com.bd.ordermanagementapp.screens.main.BottomNavItem
 import kotlinx.coroutines.flow.SharedFlow
 
-interface BottomBarRepository {
+interface UserBottomBarManager {
     val bottomBarOptionsFlow: SharedFlow<List<BottomNavItem>>
     val bottomBarStartDestinationRoute: SharedFlow<String>
     suspend fun onCartCountChanged(cartCount: Int)
-    suspend fun onCustomerTypeChanged(customerType: CustomerType)
+    suspend fun onUserTypeChanged(userType: UserType)
     suspend fun updateBottomBar()
 }

@@ -4,6 +4,8 @@ import com.bd.data.repository.campaign.CampaignRepository
 import com.bd.data.repository.campaign.CampaignRepositoryImpl
 import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.cart.CartRepositoryImpl
+import com.bd.data.repository.login.LoginRepository
+import com.bd.data.repository.login.LoginRepositoryImpl
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.repository.menu.MenuRepositoryImpl
 import com.bd.data.usecase.AddToCartUseCase
@@ -15,5 +17,6 @@ val dataModule = module {
     single<CampaignRepository> { CampaignRepositoryImpl(get()) }
     single<MenuRepository> { MenuRepositoryImpl(get()) }
     single<CartRepository> { CartRepositoryImpl(get()) }
+    single<LoginRepository> { LoginRepositoryImpl(get()) }
     single { AddToCartUseCase(get()) }
 }

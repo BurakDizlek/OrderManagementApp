@@ -16,4 +16,8 @@
     <string name="cart_bottom_bar_title">Cart</string>
     <string name="orders_bottom_bar_title">Orders</string>
     <string name="delivery_bottom_bar_title">Delivery</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>">
+    <string name="login_screen_title">Login</string>">
+    <string name="login">Login</string>">
 </resources>
