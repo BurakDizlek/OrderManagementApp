@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.bd.ordermanagementapp.screens.Graphs
+import com.bd.ordermanagementapp.screens.GraphRoute
 import com.bd.ordermanagementapp.screens.cart.CartScreen
 import com.bd.ordermanagementapp.screens.delivery.DeliveryScreen
 import com.bd.ordermanagementapp.screens.home.HomeScreen
@@ -18,7 +18,7 @@ fun BottomNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestinationRoute,
-        route = Graphs.BOTTOM_BAR
+        route = GraphRoute.BOTTOM_BAR
     ) {
         composable(route = BottomBarScreen.Home.route) {
             HomeScreen(navigationController = navController, padding = padding)
