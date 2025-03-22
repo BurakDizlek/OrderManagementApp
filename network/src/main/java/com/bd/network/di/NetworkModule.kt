@@ -10,6 +10,8 @@ import com.bd.network.service.login.LoginService
 import com.bd.network.service.login.LoginServiceImpl
 import com.bd.network.service.menu.MenuService
 import com.bd.network.service.menu.MenuServiceImpl
+import com.bd.network.service.order.OrderService
+import com.bd.network.service.order.OrderServiceImpl
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -19,4 +21,5 @@ val networkModule = module {
     single<MenuService> { MenuServiceImpl(get()) }
     single<CartService> { CartServiceImpl(get()) }
     single<LoginService> { LoginServiceImpl(get()) }
+    single<OrderService> { OrderServiceImpl(get()) }
 }
