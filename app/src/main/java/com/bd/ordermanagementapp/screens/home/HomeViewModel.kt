@@ -2,6 +2,7 @@ package com.bd.ordermanagementapp.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.core.session.SessionManager
 import com.bd.data.extensions.orZero
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
@@ -19,7 +20,8 @@ class HomeViewModel(
     private val campaignRepository: CampaignRepository,
     private val menuRepository: MenuRepository,
     private val addToCartUseCase: AddToCartUseCase,
-    private val userBottomBarManager: UserBottomBarManager
+    private val userBottomBarManager: UserBottomBarManager,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
@@ -94,11 +96,39 @@ class HomeViewModel(
     }
 
     fun onOrderOrCartDecisionDialogDismiss() {
-        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+        if (_uiState.value.orderOrCartDecisionMenuItemId != null)
+            _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
     }
 
     fun onOrderNowButtonClicked(menuItemId: Int) {
-        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
+        if (sessionManager.isUserLoggedIn()) {
+            _uiState.update {
+                it.copy(
+                    orderOrCartDecisionMenuItemId = null,
+                    quickOrderMenuItemId = menuItemId
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    orderOrCartDecisionMenuItemId = null,
+                    displayNeedLoginDialog = true
+                )
+            }
+        }
+    }
+
+    fun onQuickOrderNavigationCompleted() {
+        if (_uiState.value.quickOrderMenuItemId != null)
+            _uiState.update { it.copy(quickOrderMenuItemId = null) }
+    }
+
+    fun onNeedToLoginDialogDismiss() {
+        if (_uiState.value.displayNeedLoginDialog) {
+            _uiState.update {
+                it.copy(displayNeedLoginDialog = false)
+            }
+        }
     }
 
     fun onErrorOkButtonClicked() {

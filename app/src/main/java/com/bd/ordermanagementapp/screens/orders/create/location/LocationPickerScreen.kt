@@ -21,7 +21,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.bd.data.extensions.orZero
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryData
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -104,9 +106,14 @@ fun LocationPickerScreen(
                                     .weight(1f),
                                 onClick = {
                                     val confirmedLocation = viewModel.confirmLocation()
-
-                                    // Handle confirmed location (e.g., return it to the previous screen).
-                                    // confirmedLocation?.let {}
+                                    navController.navigate(
+                                        OrderDetailEntryData(
+                                            isQuickOrder = data.isQuickOrder,
+                                            menuItemId = data.menuItemId,
+                                            longitude = confirmedLocation?.longitude.orZero(),
+                                            latitude = confirmedLocation?.latitude.orZero()
+                                        )
+                                    )
                                 }) {
                                 Text(stringResource(R.string.confirm))
                             }

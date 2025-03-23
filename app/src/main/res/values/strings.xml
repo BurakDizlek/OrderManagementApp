@@ -27,4 +27,10 @@
     <string name="location_permission_needed_to_send_delivery">We need to provide location permission so that we can send you your order.</string>
     <string name="location_permission_denied_message">Location permission is required.</string>
     <string name="request_permission">Request Permission</string>
+    <string name="order_detail_entry_title">Order Detail Entry</string>
+    <string name="complete">Complete</string>
+    <string name="address">Address</string>
+    <string name="note">Note</string>
+    <string name="you_need_to_login_to_order">You need to login to order.</string>
+    <string name="close">Close</string>
 </resources>

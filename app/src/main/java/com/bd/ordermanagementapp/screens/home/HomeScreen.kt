@@ -54,6 +54,7 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.GraphRoute
 import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerScreenData
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
@@ -172,16 +173,34 @@ fun HomeScreen(
                 rightButtonClick = { viewModel.onAddToCartClicked(menuItemId = menuItemId) },
                 leftButtonClick = {
                     viewModel.onOrderNowButtonClicked(menuItemId = menuItemId)
-                    navigationController.navigate(
-                        LocationPickerScreenData(
-                            isQuickOrder = true,
-                            menuItemId = menuItemId
-                        )
-                    )
                 },
                 onDismiss = { viewModel.onOrderOrCartDecisionDialogDismiss() },
                 rightButtonText = stringResource(R.string.add_to_cart),
                 leftButtonText = stringResource(R.string.order_now)
+            )
+        }
+
+        if (state.displayNeedLoginDialog) {
+            DecisionDialog(
+                title = stringResource(R.string.login),
+                message = stringResource(R.string.you_need_to_login_to_order),
+                rightButtonClick = {
+                    navigationController.navigate(GraphRoute.LOGIN)
+                },
+                leftButtonClick = {},
+                onDismiss = { viewModel.onNeedToLoginDialogDismiss() },
+                rightButtonText = stringResource(R.string.login),
+                leftButtonText = stringResource(R.string.close)
+            )
+        }
+
+        state.quickOrderMenuItemId?.let { menuItemId ->
+            viewModel.onQuickOrderNavigationCompleted()
+            navigationController.navigate(
+                LocationPickerScreenData(
+                    isQuickOrder = true,
+                    menuItemId = menuItemId
+                )
             )
         }
     }

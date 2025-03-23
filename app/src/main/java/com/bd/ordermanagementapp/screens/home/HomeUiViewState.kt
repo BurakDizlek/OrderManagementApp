@@ -19,5 +19,9 @@ data class HomeUiViewState(
     val cart: Cart? = null,
     val loadingOrderOrCart: Boolean = false,
     val errorOrderOrCart: String? = null,
-    val orderOrCartDecisionMenuItemId: Int? = null
+    val orderOrCartDecisionMenuItemId: Int? = null,
+
+    //Quick order
+    val displayNeedLoginDialog: Boolean = false,
+    val quickOrderMenuItemId: Int? = null
 )
