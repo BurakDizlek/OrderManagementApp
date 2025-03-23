@@ -10,6 +10,7 @@ import com.bd.ordermanagementapp.screens.cart.CartScreen
 import com.bd.ordermanagementapp.screens.delivery.DeliveryScreen
 import com.bd.ordermanagementapp.screens.home.HomeScreen
 import com.bd.ordermanagementapp.screens.login.loginNavigationGraph
+import com.bd.ordermanagementapp.screens.orders.create.createOrderNavigationGraph
 
 @Composable
 fun BottomNavGraph(
@@ -36,5 +37,7 @@ fun BottomNavGraph(
             DeliveryScreen()
         }
         loginNavigationGraph(navController)
+
+        createOrderNavigationGraph(navController)
     }
 }

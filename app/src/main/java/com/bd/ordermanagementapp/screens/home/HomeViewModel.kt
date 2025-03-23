@@ -99,7 +99,6 @@ class HomeViewModel(
 
     fun onOrderNowButtonClicked(menuItemId: Int) {
         _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
-        //todo create order will be called here!
     }
 
     fun onErrorOkButtonClicked() {

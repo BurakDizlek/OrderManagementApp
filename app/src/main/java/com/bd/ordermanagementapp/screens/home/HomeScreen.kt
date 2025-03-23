@@ -54,6 +54,7 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.orders.create.LocationPickerScreenData
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
@@ -169,7 +170,15 @@ fun HomeScreen(
                 title = stringResource(R.string.decision_title),
                 message = stringResource(R.string.cart_or_order_decision_message),
                 rightButtonClick = { viewModel.onAddToCartClicked(menuItemId = menuItemId) },
-                leftButtonClick = { viewModel.onOrderNowButtonClicked(menuItemId = menuItemId) },
+                leftButtonClick = {
+                    viewModel.onOrderNowButtonClicked(menuItemId = menuItemId)
+                    navigationController.navigate(
+                        LocationPickerScreenData(
+                            isQuickOrder = true,
+                            menuItemId = menuItemId
+                        )
+                    )
+                },
                 onDismiss = { viewModel.onOrderOrCartDecisionDialogDismiss() },
                 rightButtonText = stringResource(R.string.add_to_cart),
                 leftButtonText = stringResource(R.string.order_now)

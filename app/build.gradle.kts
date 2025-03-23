@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -57,6 +58,12 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.kotlinx.coroutines)
+    implementation(libs.maps.compose)
+    implementation(libs.accompanist.permissions)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

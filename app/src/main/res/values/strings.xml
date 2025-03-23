@@ -20,4 +20,11 @@
     <string name="login_password">Password</string>">
     <string name="login_screen_title">Login</string>">
     <string name="login">Login</string>">
+    <string name="location_picker_title">Select a location</string>
+    <string name="location_picker_marker_text">Send delivery here</string>
+    <string name="current_location">Current location</string>
+    <string name="confirm">Confirm</string>
+    <string name="location_permission_needed_to_send_delivery">We need to provide location permission so that we can send you your order.</string>
+    <string name="location_permission_denied_message">Location permission is required.</string>
+    <string name="request_permission">Request Permission</string>
 </resources>
