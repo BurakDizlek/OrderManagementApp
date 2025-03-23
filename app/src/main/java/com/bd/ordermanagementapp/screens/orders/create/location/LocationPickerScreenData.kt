@@ -1,4 +1,4 @@
-package com.bd.ordermanagementapp.screens.orders.create
+package com.bd.ordermanagementapp.screens.orders.create.location
 
 import kotlinx.serialization.Serializable
 

@@ -54,7 +54,7 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
-import com.bd.ordermanagementapp.screens.orders.create.LocationPickerScreenData
+import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerScreenData
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView

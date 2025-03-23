@@ -1,5 +1,6 @@
-package com.bd.ordermanagementapp.screens.orders.create
+package com.bd.ordermanagementapp.screens.orders.create.location
 
+import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +42,7 @@ fun LocationPickerScreen(
 ) {
     val context = LocalContext.current
     val locationPermissionState =
-        rememberPermissionState(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val pickedLocation by viewModel.pickedLocation
 
     LaunchedEffect(Unit) {

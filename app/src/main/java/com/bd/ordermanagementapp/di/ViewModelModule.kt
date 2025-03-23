@@ -4,7 +4,7 @@ import com.bd.ordermanagementapp.screens.cart.CartViewModel
 import com.bd.ordermanagementapp.screens.home.HomeViewModel
 import com.bd.ordermanagementapp.screens.login.LoginViewModel
 import com.bd.ordermanagementapp.screens.main.MainViewModel
-import com.bd.ordermanagementapp.screens.orders.create.LocationPickerViewModel
+import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

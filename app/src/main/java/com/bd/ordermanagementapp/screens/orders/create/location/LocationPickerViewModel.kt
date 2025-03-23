@@ -1,4 +1,4 @@
-package com.bd.ordermanagementapp.screens.orders.create
+package com.bd.ordermanagementapp.screens.orders.create.location
 
 import android.Manifest
 import android.annotation.SuppressLint
