@@ -37,4 +37,5 @@
     <string name="create_order_success_message">You have created order successfully.</string>
     <string name="order_id_with_text">Order id: %1$s</string>
     <string name="go_to_orders">Go to orders</string>
+    <string name="campaign_detail_title">Campaign Detail</string>">
 </resources>

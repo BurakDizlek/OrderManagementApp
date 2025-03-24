@@ -1,14 +1,13 @@
 package com.bd.ordermanagementapp.screens.home
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.core.session.SessionManager
-import com.bd.data.extensions.orZero
 import com.bd.data.model.ResultCodes
 import com.bd.data.repository.campaign.CampaignRepository
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.usecase.AddToCartUseCase
 import com.bd.ordermanagementapp.data.manager.UserBottomBarManager
+import com.bd.ordermanagementapp.screens.home.common.HomeCommonViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +18,11 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val campaignRepository: CampaignRepository,
     private val menuRepository: MenuRepository,
-    private val addToCartUseCase: AddToCartUseCase,
-    private val userBottomBarManager: UserBottomBarManager,
-    private val sessionManager: SessionManager
-) : ViewModel() {
+    addToCartUseCase: AddToCartUseCase,
+    userBottomBarManager: UserBottomBarManager,
+    sessionManager: SessionManager
+) : HomeCommonViewModel(addToCartUseCase, userBottomBarManager, sessionManager) {
+
     private val _uiState = MutableStateFlow(HomeUiViewState())
     val uiState: StateFlow<HomeUiViewState> = _uiState.asStateFlow()
 
@@ -89,68 +89,5 @@ class HomeViewModel(
 
     private fun handleMenuLoading(isLoading: Boolean) {
         _uiState.update { it.copy(loadingMenuItems = isLoading) }
-    }
-
-    fun onAddButtonClicked(menuItemId: Int) {
-        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = menuItemId) }
-    }
-
-    fun onOrderOrCartDecisionDialogDismiss() {
-        if (_uiState.value.orderOrCartDecisionMenuItemId != null)
-            _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
-    }
-
-    fun onOrderNowButtonClicked(menuItemId: Int) {
-        if (sessionManager.isUserLoggedIn()) {
-            _uiState.update {
-                it.copy(
-                    orderOrCartDecisionMenuItemId = null,
-                    quickOrderMenuItemId = menuItemId
-                )
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    orderOrCartDecisionMenuItemId = null,
-                    displayNeedLoginDialog = true
-                )
-            }
-        }
-    }
-
-    fun onQuickOrderNavigationCompleted() {
-        if (_uiState.value.quickOrderMenuItemId != null)
-            _uiState.update { it.copy(quickOrderMenuItemId = null) }
-    }
-
-    fun onNeedToLoginDialogDismiss() {
-        if (_uiState.value.displayNeedLoginDialog) {
-            _uiState.update {
-                it.copy(displayNeedLoginDialog = false)
-            }
-        }
-    }
-
-    fun onErrorOkButtonClicked() {
-        _uiState.update { it.copy(errorOrderOrCart = null) }
-    }
-
-    fun onAddToCartClicked(menuItemId: Int) {
-        _uiState.update { it.copy(orderOrCartDecisionMenuItemId = null) }
-        viewModelScope.launch {
-            _uiState.update { it.copy(loadingOrderOrCart = true) }
-            val result = addToCartUseCase(menuItemId = menuItemId)
-            if (result.code == ResultCodes.SUCCESS) {
-                userBottomBarManager.onCartCountChanged(result.data?.cartItems?.count().orZero())
-                _uiState.update { it.copy(cart = result.data, loadingOrderOrCart = false) }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        errorOrderOrCart = result.message,
-                        loadingOrderOrCart = false
-                    )
-                }
-            }
-        }
     }
 }
