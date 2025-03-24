@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.main.GraphRoute
 import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
@@ -17,7 +17,7 @@ import com.bd.ordermanagementapp.ui.components.ErrorDialog
 fun BoxScope.HomeCommonView(
     state: HomeCommonUiViewState,
     viewModel: HomeCommonViewModel,
-    navigationController: NavController
+    navigationController: NavHostController
 ) {
     if (state.loadingAddToCart) {
         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

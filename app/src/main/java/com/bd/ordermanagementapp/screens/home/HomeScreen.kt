@@ -31,11 +31,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.home.campaign.CampaignDetailsScreenData
+import com.bd.ordermanagementapp.screens.home.campaign.navigateToCampaignDetails
 import com.bd.ordermanagementapp.screens.home.common.HomeCommonView
 import com.bd.ordermanagementapp.screens.home.common.MenuItemView
 import com.bd.ordermanagementapp.ui.components.ErrorView
@@ -47,7 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    navigationController: NavController,
+    navController: NavHostController,
     padding: PaddingValues
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -99,7 +101,7 @@ fun HomeScreen(
                     }
                 }
                 if (state.campaigns.isNotEmpty()) {
-                    HorizontalCarousel(state.campaigns)
+                    HorizontalCarousel(state.campaigns, navController)
                 }
             }
 
@@ -132,13 +134,13 @@ fun HomeScreen(
                 }
             }
         }
-        HomeCommonView(commonState, viewModel, navigationController)
+        HomeCommonView(commonState, viewModel, navController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HorizontalCarousel(campaigns: List<Campaign>) {
+fun HorizontalCarousel(campaigns: List<Campaign>, navController: NavHostController) {
     HorizontalMultiBrowseCarousel(
         state = rememberCarouselState { campaigns.size },
         modifier = Modifier
@@ -158,7 +160,13 @@ fun HorizontalCarousel(campaigns: List<Campaign>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    //todo navigate campaign details!
+                    val data = CampaignDetailsScreenData(
+                        name = campaign.name,
+                        description = campaign.description,
+                        image = campaign.imageUrl,
+                        menuItemIds = campaign.menuItemIds
+                    )
+                    navController.navigateToCampaignDetails(data)
                 }) {
             Column(modifier = Modifier.padding(16.dp)) {
                 AsyncImage(
