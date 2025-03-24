@@ -33,4 +33,8 @@
     <string name="note">Note</string>
     <string name="you_need_to_login_to_order">You need to login to order.</string>
     <string name="close">Close</string>
+    <string name="create_order_success_title">Order Created</string>
+    <string name="create_order_success_message">You have created order successfully.</string>
+    <string name="order_id_with_text">Order id: %1$s</string>
+    <string name="go_to_orders">Go to orders</string>
 </resources>

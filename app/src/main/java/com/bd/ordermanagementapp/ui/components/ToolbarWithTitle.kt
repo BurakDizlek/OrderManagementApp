@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolbarWithTitle(title: String, navigationControllerToPopBack: NavHostController? = null) {
+fun ToolbarWithTitle(title: String, navigationControllerToPopBack: NavController? = null) {
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {

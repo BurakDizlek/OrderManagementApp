@@ -48,14 +48,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
-import com.bd.ordermanagementapp.screens.GraphRoute
-import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerScreenData
+import com.bd.ordermanagementapp.screens.main.GraphRoute
+import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
@@ -68,7 +69,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    navigationController: NavHostController,
+    navigationController: NavController,
     padding: PaddingValues
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -197,7 +198,7 @@ fun HomeScreen(
         state.quickOrderMenuItemId?.let { menuItemId ->
             viewModel.onQuickOrderNavigationCompleted()
             navigationController.navigate(
-                LocationPickerScreenData(
+                CreateOrderRoute.Starter(
                     isQuickOrder = true,
                     menuItemId = menuItemId
                 )
@@ -211,7 +212,7 @@ fun HomeScreen(
 fun RowScope.MenuItemView(
     item: MenuItem,
     viewModel: HomeViewModel,
-    navigationController: NavHostController
+    navigationController: NavController
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),

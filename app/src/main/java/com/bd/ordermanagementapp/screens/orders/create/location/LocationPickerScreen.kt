@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.bd.data.extensions.orZero
 import com.bd.ordermanagementapp.R
-import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryData
+import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -39,8 +39,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LocationPickerScreen(
     viewModel: LocationPickerViewModel = koinViewModel(),
-    navController: NavHostController,
-    data: LocationPickerScreenData
+    navController: NavController,
+    data: CreateOrderRoute.Starter
 ) {
     val context = LocalContext.current
     val locationPermissionState =
@@ -107,7 +107,7 @@ fun LocationPickerScreen(
                                 onClick = {
                                     val confirmedLocation = viewModel.confirmLocation()
                                     navController.navigate(
-                                        OrderDetailEntryData(
+                                        CreateOrderRoute.DetailEntry(
                                             isQuickOrder = data.isQuickOrder,
                                             menuItemId = data.menuItemId,
                                             longitude = confirmedLocation?.longitude.orZero(),

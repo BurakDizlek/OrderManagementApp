@@ -1,4 +1,4 @@
-package com.bd.ordermanagementapp.screens
+package com.bd.ordermanagementapp.screens.main
 
 object GraphRoute {
     const val BOTTOM_BAR = "bottom_bar_graph" // main

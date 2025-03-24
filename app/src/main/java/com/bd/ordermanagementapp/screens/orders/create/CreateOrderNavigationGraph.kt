@@ -1,23 +1,26 @@
 package com.bd.ordermanagementapp.screens.orders.create
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryData
 import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryScreen
 import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerScreen
-import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerScreenData
+import com.bd.ordermanagementapp.screens.orders.create.success.CreateOrderSuccessScreen
 
 
 fun NavGraphBuilder.createOrderNavigationGraph(
-    navController: NavHostController,
+    navController: NavController,
 ) { //consider having navigation.
-    composable<LocationPickerScreenData> { navBackStackEntry ->
+    composable<CreateOrderRoute.Starter> { navBackStackEntry ->
         LocationPickerScreen(navController = navController, data = navBackStackEntry.toRoute())
     }
 
-    composable<OrderDetailEntryData> {
+    composable<CreateOrderRoute.DetailEntry> {
         OrderDetailEntryScreen(navController = navController)
+    }
+
+    composable<CreateOrderRoute.Success> {
+        CreateOrderSuccessScreen(data = it.toRoute(), navController = navController)
     }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import com.bd.data.model.ResultCodes
 import com.bd.data.model.order.CreateOrderData
 import com.bd.data.repository.order.OrderRepository
+import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,7 @@ class OrderDetailEntryViewModel(
     private val repository: OrderRepository
 ) : ViewModel() {
 
-    val argsData = savedStateHandle.toRoute<OrderDetailEntryData>()
+    val argsData = savedStateHandle.toRoute<CreateOrderRoute.DetailEntry>()
 
     private val _uiState = MutableStateFlow(OrderDetailEntryUiViewState())
     val uiState: StateFlow<OrderDetailEntryUiViewState> = _uiState.asStateFlow()
@@ -47,5 +48,9 @@ class OrderDetailEntryViewModel(
         } catch (e: Exception) {
             _uiState.update { it.copy(loading = false, errorMessage = e.message) }
         }
+    }
+
+    fun navigated(){
+        _uiState.update { it.copy(createdOrder = null) }
     }
 }

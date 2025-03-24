@@ -21,8 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
@@ -33,10 +34,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun OrderDetailEntryScreen(
     viewModel: OrderDetailEntryViewModel = koinViewModel(),
-    navController: NavHostController,
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState.collectAsState()
-
     var address by rememberSaveable { mutableStateOf("") }
     var note by rememberSaveable { mutableStateOf("") }
 
@@ -93,7 +93,8 @@ fun OrderDetailEntryScreen(
                     }
 
                     uiState.value.createdOrder?.let {
-                        //todo navigate to success screen!
+                        viewModel.navigated()
+                        navController.navigate(CreateOrderRoute.Success(it.id))
                     }
                 }
             }
