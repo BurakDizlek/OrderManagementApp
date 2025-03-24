@@ -16,23 +16,23 @@ fun DecisionDialog(
     rightButtonText: String,
     leftButtonText: String
 ) {
-    AlertDialog(
-        onDismissRequest = {
+    AlertDialog(onDismissRequest = {
+        onDismiss()
+    }, title = { Text(title) }, text = { Text(message) }, confirmButton = {
+        Button(onClick = {
+            rightButtonClick()
             onDismiss()
-        },
-        title = { Text(title) },
-        text = { Text(message) },
-        confirmButton = {
-            Button(onClick = rightButtonClick) {
-                Text(rightButtonText)
-            }
-        },
-        dismissButton = {
-            Button(onClick = leftButtonClick) {
-                Text(leftButtonText)
-            }
+        }) {
+            Text(rightButtonText)
         }
-    )
+    }, dismissButton = {
+        Button(onClick = {
+            leftButtonClick()
+            onDismiss()
+        }) {
+            Text(leftButtonText)
+        }
+    })
 }
 
 @Preview(showBackground = true)

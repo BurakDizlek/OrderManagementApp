@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bd.ordermanagementapp.R
@@ -36,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
-    navigationController: NavHostController
+    navigationController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()

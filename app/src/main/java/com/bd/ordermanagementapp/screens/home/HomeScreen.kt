@@ -48,12 +48,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.bd.data.extensions.formatPrice
 import com.bd.data.model.Campaign
 import com.bd.data.model.MenuItem
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.screens.main.GraphRoute
+import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
@@ -66,7 +69,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    navigationController: NavHostController,
+    navigationController: NavController,
     padding: PaddingValues
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -169,10 +172,36 @@ fun HomeScreen(
                 title = stringResource(R.string.decision_title),
                 message = stringResource(R.string.cart_or_order_decision_message),
                 rightButtonClick = { viewModel.onAddToCartClicked(menuItemId = menuItemId) },
-                leftButtonClick = { viewModel.onOrderNowButtonClicked(menuItemId = menuItemId) },
+                leftButtonClick = {
+                    viewModel.onOrderNowButtonClicked(menuItemId = menuItemId)
+                },
                 onDismiss = { viewModel.onOrderOrCartDecisionDialogDismiss() },
                 rightButtonText = stringResource(R.string.add_to_cart),
                 leftButtonText = stringResource(R.string.order_now)
+            )
+        }
+
+        if (state.displayNeedLoginDialog) {
+            DecisionDialog(
+                title = stringResource(R.string.login),
+                message = stringResource(R.string.you_need_to_login_to_order),
+                rightButtonClick = {
+                    navigationController.navigate(GraphRoute.LOGIN)
+                },
+                leftButtonClick = {},
+                onDismiss = { viewModel.onNeedToLoginDialogDismiss() },
+                rightButtonText = stringResource(R.string.login),
+                leftButtonText = stringResource(R.string.close)
+            )
+        }
+
+        state.quickOrderMenuItemId?.let { menuItemId ->
+            viewModel.onQuickOrderNavigationCompleted()
+            navigationController.navigate(
+                CreateOrderRoute.Starter(
+                    isQuickOrder = true,
+                    menuItemId = menuItemId
+                )
             )
         }
     }
@@ -183,7 +212,7 @@ fun HomeScreen(
 fun RowScope.MenuItemView(
     item: MenuItem,
     viewModel: HomeViewModel,
-    navigationController: NavHostController
+    navigationController: NavController
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),

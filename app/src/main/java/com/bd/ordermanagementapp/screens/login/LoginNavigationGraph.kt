@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.bd.ordermanagementapp.screens.GraphRoute
+import com.bd.ordermanagementapp.screens.main.GraphRoute
 
 
 fun NavGraphBuilder.loginNavigationGraph(

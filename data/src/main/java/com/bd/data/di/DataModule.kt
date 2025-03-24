@@ -8,6 +8,8 @@ import com.bd.data.repository.login.LoginRepository
 import com.bd.data.repository.login.LoginRepositoryImpl
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.repository.menu.MenuRepositoryImpl
+import com.bd.data.repository.order.OrderRepository
+import com.bd.data.repository.order.OrderRepositoryImpl
 import com.bd.data.usecase.AddToCartUseCase
 import com.bd.network.di.networkModule
 import org.koin.dsl.module
@@ -18,5 +20,6 @@ val dataModule = module {
     single<MenuRepository> { MenuRepositoryImpl(get()) }
     single<CartRepository> { CartRepositoryImpl(get()) }
     single<LoginRepository> { LoginRepositoryImpl(get()) }
+    single<OrderRepository> { OrderRepositoryImpl(get()) }
     single { AddToCartUseCase(get()) }
 }
