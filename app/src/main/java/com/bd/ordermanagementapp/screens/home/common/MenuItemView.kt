@@ -34,15 +34,16 @@ import com.bd.ordermanagementapp.ui.extensions.smallPadding
 @Composable
 fun RowScope.MenuItemView(
     item: MenuItem,
-    viewModel: HomeCommonViewModel
+    viewModel: HomeCommonViewModel,
+    modifier: Modifier = Modifier
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .weight(0.5f)
             .wrapContentHeight()
-            .padding(dimensionResource(R.dimen.space_small))
+            .padding(dimensionResource(R.dimen.space_medium))
     ) {
         AsyncImage(
             model = item.imageUrl,
