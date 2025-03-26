@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.play.services.kotlinx.coroutines)
     implementation(libs.maps.compose)
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
