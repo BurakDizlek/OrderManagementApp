@@ -16,10 +16,10 @@ class OrdersViewModel(private val repository: OrderRepository) : ViewModel() {
     val uiState: StateFlow<OrdersUiViewState> = _uiState.asStateFlow()
 
     fun getOrders() {
-        try {
-            _uiState.value =
-                _uiState.value.copy(loading = true, errorMessage = null, isOrdersEmpty = false)
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _uiState.value =
+                    _uiState.value.copy(loading = true, errorMessage = null, isOrdersEmpty = false)
                 val result = repository.getFilteredOrders(
                     filterOrderData = FilterOrderData(
                         query = _uiState.value.filterData.query,
@@ -37,12 +37,13 @@ class OrdersViewModel(private val repository: OrderRepository) : ViewModel() {
                     }
                 } else {
                     _uiState.value = _uiState.value.copy(errorMessage = result.message)
+
                 }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.localizedMessage)
+            } finally {
+                _uiState.value = _uiState.value.copy(loading = false)
             }
-        } catch (e: Exception) {
-            _uiState.value = _uiState.value.copy(errorMessage = e.localizedMessage)
-        } finally {
-            _uiState.value = _uiState.value.copy(loading = false)
         }
     }
 

@@ -60,7 +60,7 @@ fun OrderFilterComponent(
         delay(350) // Wait 350ms after the last query change
         onFilterChanged(
             FilterOrderData(
-                query = query,
+                query = query.takeIf { it.isNotBlank() },
                 fromTime = fromTimeMillis,
                 toTime = toTimeMillis,
                 statuses = selectedStatuses.toList()
@@ -72,7 +72,7 @@ fun OrderFilterComponent(
     LaunchedEffect(selectedStatuses, fromTimeMillis, toTimeMillis) {
         onFilterChanged(
             FilterOrderData(
-                query = query,
+                query = query.takeIf { it.isNotBlank() },
                 fromTime = fromTimeMillis,
                 toTime = toTimeMillis,
                 statuses = selectedStatuses.toList().takeIf { it.isNotEmpty() }
