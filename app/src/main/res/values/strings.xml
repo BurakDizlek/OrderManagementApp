@@ -56,4 +56,8 @@
     <string name="content">Content</string>">
     <string name="price">Price</string>">
     <string name="details">Details</string>
+    <string name="order_details_title">Order Details</string>
+    <string name="last_update_time">Last Update Time</string>
+    <string name="order_id">Order Id</string>
+    <string name="confirm_received">Confirm Received</string>
 </resources>

@@ -5,4 +5,5 @@ object GraphRoute {
     const val LOGIN = "login_graph"
     const val CREATE_ORDER = "create_order_graph"
     const val CAMPAIGN_DETAILS = "campaign_details_graph"
+    const val ORDER_DETAILS = "order_details_graph"
 }
