@@ -50,4 +50,10 @@
     <string name="cancel">Cancel</string>">
     <string name="ok">OK</string>">
     <string name="filter_orders_dialog_title">Filter Orders</string>">
+    <string name="there_are_no_orders">There are no orders.</string>">
+    <string name="status">Status</string>">
+    <string name="created_time">Created Time</string>">
+    <string name="content">Content</string>">
+    <string name="price">Price</string>">
+    <string name="details">Details</string>
 </resources>

@@ -31,12 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bd.data.extensions.ensureEndOfDay
+import com.bd.data.extensions.ensureStartOfDay
+import com.bd.data.extensions.formatMillisDate
 import com.bd.data.extensions.orZero
 import com.bd.data.model.order.OrderStatus
 import com.bd.ordermanagementapp.R
-import com.bd.ordermanagementapp.data.util.ensureEndOfDay
-import com.bd.ordermanagementapp.data.util.ensureStartOfDay
-import com.bd.ordermanagementapp.data.util.formatMillisDate
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -130,8 +130,9 @@ internal fun FilterDialog(
                         onClick = { showStartDatePicker = true },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(tempFromTime?.let { formatMillisDate(it) }
-                            ?: stringResource(R.string.start_date))
+                        Text(
+                            tempFromTime?.formatMillisDate() ?: stringResource(R.string.start_date)
+                        )
                     }
                     Spacer(Modifier.width(dimensionResource(R.dimen.space_small)))
                     Text("-", modifier = Modifier.align(Alignment.CenterVertically))
@@ -140,8 +141,7 @@ internal fun FilterDialog(
                         onClick = { showEndDatePicker = true },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(tempToTime?.let { formatMillisDate(it) }
-                            ?: stringResource(R.string.end_date))
+                        Text(tempToTime?.formatMillisDate() ?: stringResource(R.string.end_date))
                     }
                 }
             }
@@ -174,7 +174,7 @@ internal fun FilterDialog(
             confirmButton = {
                 TextButton(onClick = {
                     tempFromTime =
-                        startDatePickerState.selectedDateMillis?.let { ensureStartOfDay(it) }
+                        startDatePickerState.selectedDateMillis?.ensureStartOfDay()
                     if (tempFromTime != null && tempToTime != null && tempFromTime!! > tempToTime!!) {
                         tempToTime = null
                         endDatePickerState.selectedDateMillis = null
@@ -197,7 +197,7 @@ internal fun FilterDialog(
             onDismissRequest = { showEndDatePicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    tempToTime = endDatePickerState.selectedDateMillis?.let { ensureEndOfDay(it) }
+                    tempToTime = endDatePickerState.selectedDateMillis?.ensureEndOfDay()
                     if (tempFromTime != null && tempToTime != null && tempToTime!! < tempFromTime!!) {
                         tempToTime = null
                     }
