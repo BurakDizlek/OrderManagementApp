@@ -9,6 +9,8 @@ interface OrderRepository {
 
     suspend fun getAllOrders(): BaseResult<List<Order>>
 
+    suspend fun getOrderById(orderId: String): BaseResult<Order>
+
     suspend fun createOrder(createOrderData: CreateOrderData): BaseResult<Order>
 
     suspend fun getFilteredOrders(filterOrderData: FilterOrderData): BaseResult<List<Order>>

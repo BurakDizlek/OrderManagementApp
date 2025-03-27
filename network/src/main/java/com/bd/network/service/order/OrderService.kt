@@ -9,6 +9,8 @@ interface OrderService {
 
     suspend fun getAllOrders(): BaseResponse<List<OrderDto>?>
 
+    suspend fun getOrderById(orderId: String): BaseResponse<OrderDto?>
+
     suspend fun createOrder(request: CreateOrderRequest): BaseResponse<OrderDto?>
 
     suspend fun getFilteredOrders(

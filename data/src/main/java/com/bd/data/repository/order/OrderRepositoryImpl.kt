@@ -21,6 +21,11 @@ class OrderRepositoryImpl(private val service: OrderService) : OrderRepository {
         )
     }
 
+    override suspend fun getOrderById(orderId: String): BaseResult<Order> {
+        val response = service.getOrderById(orderId = orderId)
+        return response.toBaseResult { it.toOrder() }
+    }
+
     override suspend fun createOrder(createOrderData: CreateOrderData): BaseResult<Order> {
         val response = service.createOrder(
             request = CreateOrderRequest(
