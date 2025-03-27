@@ -12,11 +12,17 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +34,7 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.order.Order
 import com.bd.data.model.order.OrderStatus
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.ui.components.DecisionDialog
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.KeyValue
 import com.bd.ordermanagementapp.ui.components.ProgressView
@@ -35,6 +42,7 @@ import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
 import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,6 +53,12 @@ fun OrderDetailsScreen(
 ) {
 
     val state by viewModel.uiState.collectAsState()
+
+    var showCancelDialog by remember { mutableStateOf(false) }
+    var showConfirmDialog by remember { mutableStateOf(false) }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
 
     LaunchedEffect(Unit) {
         viewModel.getOrderId(orderId = orderId)
@@ -58,6 +72,7 @@ fun OrderDetailsScreen(
                     navigationControllerToPopBack = navController
                 )
             },
+            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             content = { padding ->
                 Box(
                     modifier = Modifier
@@ -65,9 +80,15 @@ fun OrderDetailsScreen(
                         .padding(padding)
                         .background(DustyWhite)
                 ) {
-
                     state.order?.let {
-                        OrderDetailsItem(order = it)
+                        OrderDetailsItem(
+                            order = it,
+                            onCancelClicked = {
+                                showCancelDialog = true
+                            }, onConfirmClicked = {
+                                showConfirmDialog = true
+                            }
+                        )
                     }
 
                     if (state.loading) {
@@ -79,14 +100,68 @@ fun OrderDetailsScreen(
                             viewModel.getOrderId(orderId)
                         }
                     }
-                }
-            })
 
+                    if (showCancelDialog) {
+                        DecisionDialog(
+                            title = stringResource(R.string.cancel_order_dialog_title),
+                            message = stringResource(R.string.cancel_order_dialog_message),
+                            rightButtonClick = {
+                                viewModel.cancelOrder(orderId = orderId)
+                            },
+                            leftButtonClick = {
+                            },
+                            onDismiss = {
+                                showCancelDialog = false
+                            },
+                            rightButtonText = stringResource(R.string.yes),
+                            leftButtonText = stringResource(R.string.no)
+                        )
+                    }
+
+                    if (showConfirmDialog) {
+                        DecisionDialog(
+                            title = stringResource(R.string.confirm_order_received_dialog_title),
+                            message = stringResource(R.string.confirm_order_received_dialog_message),
+                            rightButtonClick = {
+                                viewModel.confirmOrderReceived(orderId = orderId)
+                            },
+                            leftButtonClick = {
+                            },
+                            onDismiss = {
+                                showConfirmDialog = false
+                            },
+                            rightButtonText = stringResource(R.string.yes),
+                            leftButtonText = stringResource(R.string.no)
+                        )
+                    }
+
+                    // error messages
+                    state.errorCancelMessage?.let {
+                        scope.launch {
+                            snackBarHostState.showSnackbar(it)
+                            viewModel.clearCancelErrorMessage()
+                        }
+                    }
+
+                    state.errorConfirmMessage?.let {
+                        scope.launch {
+                            snackBarHostState.showSnackbar(it)
+                            viewModel.clearConfirmErrorMessage()
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
 @Composable
-fun OrderDetailsItem(modifier: Modifier = Modifier, order: Order) {
+fun OrderDetailsItem(
+    modifier: Modifier = Modifier,
+    order: Order,
+    onCancelClicked: () -> Unit,
+    onConfirmClicked: () -> Unit
+) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
         modifier = modifier
@@ -128,9 +203,7 @@ fun OrderDetailsItem(modifier: Modifier = Modifier, order: Order) {
 
             if (order.status == OrderStatus.OPEN) {
                 Button(
-                    onClick = {
-                        // todo cancel
-                    },
+                    onClick = onCancelClicked,
                     modifier = Modifier.align(Alignment.End),
                     colors = ButtonDefaults.buttonColors(Color.Red)
                 ) {
@@ -140,9 +213,7 @@ fun OrderDetailsItem(modifier: Modifier = Modifier, order: Order) {
 
             if (order.status == OrderStatus.ON_THE_WAY) {
                 Button(
-                    onClick = {
-                        // todo confirm received
-                    },
+                    onClick = onConfirmClicked,
                     modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(text = stringResource(R.string.confirm_received))

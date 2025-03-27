@@ -15,20 +15,69 @@ class OrderDetailsViewModel(private val repository: OrderRepository) : ViewModel
     val uiState: StateFlow<OrderDetailsUiViewState> = _uiState.asStateFlow()
 
     fun getOrderId(orderId: String) {
-        try {
-            _uiState.value = _uiState.value.copy(loading = true, errorMessage = null)
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(loading = true, errorMessage = null)
+
                 val result = repository.getOrderById(orderId = orderId)
                 if (result.code == ResultCodes.SUCCESS) {
                     _uiState.value = _uiState.value.copy(order = result.data)
                 } else {
                     _uiState.value = _uiState.value.copy(errorMessage = result.message)
                 }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.localizedMessage)
+            } finally {
+                _uiState.value = _uiState.value.copy(loading = false)
             }
-        } catch (e: Exception) {
-            _uiState.value = _uiState.value.copy(errorMessage = e.localizedMessage)
-        } finally {
-            _uiState.value = _uiState.value.copy(loading = false)
         }
+    }
+
+    fun cancelOrder(orderId: String) {
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(loading = true, errorCancelMessage = null)
+
+                val result = repository.cancelOrder(orderId = orderId)
+                if (result.code == ResultCodes.SUCCESS) {
+                    _uiState.value = _uiState.value.copy(order = result.data)
+                } else {
+                    _uiState.value = _uiState.value.copy(errorCancelMessage = result.message)
+                }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorCancelMessage = e.localizedMessage)
+            } finally {
+                _uiState.value = _uiState.value.copy(loading = false)
+            }
+        }
+    }
+
+    fun clearCancelErrorMessage(){
+        _uiState.value = _uiState.value.copy(errorCancelMessage = null)
+    }
+
+    fun confirmOrderReceived(orderId: String) {
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(loading = true, errorConfirmMessage = null)
+                val result = repository.completeDelivery(orderId = orderId)
+                if (result.code == ResultCodes.SUCCESS) {
+                    _uiState.value = _uiState.value.copy(order = result.data)
+                } else {
+                    _uiState.value = _uiState.value.copy(errorConfirmMessage = result.message)
+                }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorConfirmMessage = e.localizedMessage)
+            } finally {
+                _uiState.value = _uiState.value.copy(loading = false)
+            }
+        }
+    }
+
+    fun clearConfirmErrorMessage() {
+        _uiState.value = _uiState.value.copy(errorConfirmMessage = null)
     }
 }
