@@ -31,7 +31,7 @@ fun OrderDto?.toOrder(): Order {
         orderItems = this?.orderItems?.map { it.toOrderMenuItem() }.orEmpty(),
         totalPrice = this?.totalPrice.orZero(),
         currency = this?.currency.orEmpty(),
-        status = OrderStatus.fromValue(this?.status),
+        status = OrderStatus.fromValueOrDefault(this?.status),
         statusText = this?.statusText.orEmpty(),
         orderCreatedTime = this?.orderCreatedTime.orZero(),
         statusChangedTime = this?.statusChangedTime.orZero(),

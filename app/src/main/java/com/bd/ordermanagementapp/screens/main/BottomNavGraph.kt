@@ -11,6 +11,8 @@ import com.bd.ordermanagementapp.screens.home.HomeScreen
 import com.bd.ordermanagementapp.screens.home.campaign.campaignDetailsNavigationGraph
 import com.bd.ordermanagementapp.screens.login.loginNavigationGraph
 import com.bd.ordermanagementapp.screens.orders.create.createOrderNavigationGraph
+import com.bd.ordermanagementapp.screens.orders.details.orderDetailsNavigationGraph
+import com.bd.ordermanagementapp.screens.orders.list.OrdersScreen
 
 @Composable
 fun BottomNavGraph(
@@ -30,7 +32,7 @@ fun BottomNavGraph(
         }
 
         composable(route = BottomBarScreen.Orders.route) {
-            DeliveryScreen()//todo
+            OrdersScreen(navController = navController)
         }
 
         composable(route = BottomBarScreen.Delivery.route) {
@@ -41,5 +43,7 @@ fun BottomNavGraph(
         createOrderNavigationGraph(navController)
 
         campaignDetailsNavigationGraph(navController)
+
+        orderDetailsNavigationGraph(navController)
     }
 }

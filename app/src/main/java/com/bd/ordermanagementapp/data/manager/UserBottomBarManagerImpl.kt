@@ -35,7 +35,7 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
     private fun getBottomBarOptions(): List<BottomNavItem> {
         val homeVisibility = userType != UserType.RESTAURANT_MANAGER
         val cartVisibility = userType != UserType.RESTAURANT_MANAGER
-        val ordersVisibility = userType != UserType.RESTAURANT_MANAGER
+        val ordersVisibility = userType == UserType.CUSTOMER
         val deliveryVisibility = userType == UserType.RESTAURANT_MANAGER
 
         return listOf(

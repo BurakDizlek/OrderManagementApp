@@ -25,6 +25,17 @@ class OrderServiceImpl(private val client: HttpClient) : OrderService {
         }
     }
 
+    override suspend fun getOrderById(orderId: String): BaseResponse<OrderDto?> {
+        return handleErrors {
+            client.get("$ORDER_URL/byId") {
+                url {
+                    parameters.append("orderId", orderId)
+                }
+                contentType(ContentType.Application.Json)
+            }
+        }
+    }
+
     override suspend fun createOrder(request: CreateOrderRequest): BaseResponse<OrderDto?> {
         return handleErrors {
             client.post("$ORDER_URL/create") {

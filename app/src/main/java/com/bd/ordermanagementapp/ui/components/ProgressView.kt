@@ -15,9 +15,9 @@ import com.bd.ordermanagementapp.R
  * The indicator is centered and takes up the full width of its container.
  */
 @Composable
-fun ProgressView() {
+fun ProgressView(modifier: Modifier = Modifier) {
     CircularProgressIndicator(
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = dimensionResource(R.dimen.space_large))
             .fillMaxWidth()
             .wrapContentSize(Alignment.Center)
