@@ -81,4 +81,7 @@
     <string name="no_orders_with_location">No orders with location.</string>
     <string name="recipient">Recipient</string>
     <string name="address_loading">Address loading</string>
+    <string name="start_delivery">Start Delivery</string>
+    <string name="start_delivery_dialog_title">Start delivery</string>
+    <string name="start_delivery_dialog_message">You are going to start delivery, do you really want to start it?</string>
 </resources>

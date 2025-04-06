@@ -3,6 +3,7 @@ package com.bd.ordermanagementapp.screens.orders.details
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -56,6 +57,7 @@ fun OrderDetailsScreen(
 
     var showCancelDialog by remember { mutableStateOf(false) }
     var showConfirmDialog by remember { mutableStateOf(false) }
+    var showStartDeliveryDialog by remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -87,6 +89,10 @@ fun OrderDetailsScreen(
                                 showCancelDialog = true
                             }, onConfirmClicked = {
                                 showConfirmDialog = true
+                            },
+                            isManager = viewModel.isManager(),
+                            onStartDeliveryClicked = {
+                                showStartDeliveryDialog = true
                             }
                         )
                     }
@@ -135,6 +141,23 @@ fun OrderDetailsScreen(
                         )
                     }
 
+                    if (showStartDeliveryDialog) {
+                        DecisionDialog(
+                            title = stringResource(R.string.start_delivery_dialog_title),
+                            message = stringResource(R.string.start_delivery_dialog_message),
+                            rightButtonClick = {
+                                viewModel.startDelivery(orderId = orderId)
+                            },
+                            leftButtonClick = {
+                            },
+                            onDismiss = {
+                                showStartDeliveryDialog = false
+                            },
+                            rightButtonText = stringResource(R.string.yes),
+                            leftButtonText = stringResource(R.string.no)
+                        )
+                    }
+
                     // error messages
                     state.errorCancelMessage?.let {
                         scope.launch {
@@ -149,6 +172,13 @@ fun OrderDetailsScreen(
                             viewModel.clearConfirmErrorMessage()
                         }
                     }
+
+                    state.errorStartDeliveryMessage?.let {
+                        scope.launch {
+                            snackBarHostState.showSnackbar(it)
+                            viewModel.clearStartDeliveryErrorMessage()
+                        }
+                    }
                 }
             }
         )
@@ -161,6 +191,8 @@ fun OrderDetailsItem(
     order: Order,
     onCancelClicked: () -> Unit,
     onConfirmClicked: () -> Unit,
+    isManager: Boolean = false,
+    onStartDeliveryClicked: () -> Unit,
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
@@ -203,16 +235,31 @@ fun OrderDetailsItem(
             }
 
             if (order.status == OrderStatus.OPEN) {
-                Button(
-                    onClick = onCancelClicked,
-                    modifier = Modifier.align(Alignment.End),
-                    colors = ButtonDefaults.buttonColors(Color.Red)
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.End)
                 ) {
-                    Text(text = stringResource(R.string.cancel))
+                    Button(
+                        onClick = onCancelClicked,
+                        colors = ButtonDefaults.buttonColors(Color.Red)
+                    ) {
+                        Text(text = stringResource(R.string.cancel))
+                    }
+                    if (isManager) {
+                        Button(
+                            onClick = onStartDeliveryClicked,
+                            colors = ButtonDefaults.buttonColors(Color.Yellow)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.start_delivery),
+                                color = Color.Black
+                            )
+                        }
+                    }
                 }
             }
 
-            if (order.status == OrderStatus.ON_THE_WAY) {
+            if (order.status == OrderStatus.ON_THE_WAY && !isManager) {
                 Button(
                     onClick = onConfirmClicked,
                     modifier = Modifier.align(Alignment.End)
