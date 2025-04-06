@@ -6,7 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bd.ordermanagementapp.screens.cart.CartScreen
-import com.bd.ordermanagementapp.screens.delivery.DeliveryScreen
+import com.bd.ordermanagementapp.screens.delivery.DeliveryListScreen
+import com.bd.ordermanagementapp.screens.delivery.DeliveryMapScreen
 import com.bd.ordermanagementapp.screens.home.HomeScreen
 import com.bd.ordermanagementapp.screens.home.campaign.campaignDetailsNavigationGraph
 import com.bd.ordermanagementapp.screens.login.loginNavigationGraph
@@ -16,7 +17,7 @@ import com.bd.ordermanagementapp.screens.orders.list.OrdersScreen
 
 @Composable
 fun BottomNavGraph(
-    navController: NavHostController, startDestinationRoute: String, padding: PaddingValues
+    navController: NavHostController, startDestinationRoute: String, padding: PaddingValues,
 ) {
     NavHost(
         navController = navController,
@@ -35,9 +36,13 @@ fun BottomNavGraph(
             OrdersScreen(navController = navController)
         }
 
-        composable(route = BottomBarScreen.Delivery.route) {
-            DeliveryScreen()
+        composable(route = BottomBarScreen.DeliveryList.route) {
+            DeliveryListScreen(navController = navController)
         }
+        composable(route = BottomBarScreen.DeliveryMap.route) {
+            DeliveryMapScreen(navController = navController, parentPadding = padding)
+        }
+
         loginNavigationGraph(navController)
 
         createOrderNavigationGraph(navController)

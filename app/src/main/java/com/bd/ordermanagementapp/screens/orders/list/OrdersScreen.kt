@@ -29,7 +29,7 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.order.Order
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.orders.details.navigateToOrderDetails
-import com.bd.ordermanagementapp.screens.orders.filter.OrderFilterComponent
+import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.KeyValue
 import com.bd.ordermanagementapp.ui.components.ProgressView

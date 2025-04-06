@@ -23,7 +23,7 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
     private fun getStartDestinationRoute(): String {
         return when (userType) {
             UserType.RESTAURANT_MANAGER -> {
-                BottomBarScreen.Delivery.route
+                BottomBarScreen.DeliveryList.route
             }
 
             else -> {
@@ -42,7 +42,8 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
             BottomNavItem(BottomBarScreen.Home, homeVisibility),
             BottomNavItem(BottomBarScreen.Cart, cartVisibility, cartCount),
             BottomNavItem(BottomBarScreen.Orders, ordersVisibility),
-            BottomNavItem(BottomBarScreen.Delivery, deliveryVisibility)
+            BottomNavItem(BottomBarScreen.DeliveryList, deliveryVisibility),
+            BottomNavItem(BottomBarScreen.DeliveryMap, deliveryVisibility)
         )
     }
 

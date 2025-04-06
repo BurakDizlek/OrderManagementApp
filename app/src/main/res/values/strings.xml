@@ -15,7 +15,8 @@
     <string name="home_bottom_bar_title">Home</string>
     <string name="cart_bottom_bar_title">Cart</string>
     <string name="orders_bottom_bar_title">Orders</string>
-    <string name="delivery_bottom_bar_title">Delivery</string>
+    <string name="delivery_list_bottom_bar_title">List</string>
+    <string name="delivery_map_bottom_bar_title">Map</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>">
     <string name="login_screen_title">Login</string>">
@@ -66,4 +67,18 @@
     <string name="cancel_order_dialog_message">Your order will be cancelled. Do you really want to cancel it?</string>
     <string name="confirm_order_received_dialog_title">Confirm Order Received</string>
     <string name="confirm_order_received_dialog_message">Please confirm you have received your order.</string>
+    <string name="delivery_list_screen_title">Delivery List</string>
+    <string name="delivery_map_screen_title">Delivery Map</string>
+    <string name="address_not_found">Address not found</string>
+    <string name="invalid_coordinates">Invalid coordinates</string>
+    <string name="address_error">Address error</string>
+    <string name="list">List</string>
+    <string name="map">Map</string>
+    <string name="reject">Reject</string>
+    <string name="order_id_prefix">Order id:</string>
+    <string name="recipient_prefix">Recipient:</string>
+    <string name="status_prefix">Status:</string>
+    <string name="no_orders_with_location">No orders with location.</string>
+    <string name="recipient">Recipient</string>
+    <string name="address_loading">Address loading</string>
 </resources>

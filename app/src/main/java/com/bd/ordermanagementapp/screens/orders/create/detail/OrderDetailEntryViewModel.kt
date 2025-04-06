@@ -32,7 +32,7 @@ class OrderDetailEntryViewModel(
                     CreateOrderData(
                         isQuickOrder = argsData.isQuickOrder,
                         menuItemId = argsData.menuItemId,
-                        latitude = argsData.longitude,
+                        latitude = argsData.latitude,
                         longitude = argsData.longitude,
                         address = address,
                         note = note
