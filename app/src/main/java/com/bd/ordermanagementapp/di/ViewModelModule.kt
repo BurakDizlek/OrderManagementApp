@@ -1,6 +1,7 @@
 package com.bd.ordermanagementapp.di
 
 import com.bd.ordermanagementapp.screens.cart.CartViewModel
+import com.bd.ordermanagementapp.screens.delivery.DeliveryViewModel
 import com.bd.ordermanagementapp.screens.home.HomeViewModel
 import com.bd.ordermanagementapp.screens.home.campaign.CampaignDetailsViewModel
 import com.bd.ordermanagementapp.screens.login.LoginViewModel
@@ -22,4 +23,5 @@ val viewModelModule = module {
     viewModelOf(::CampaignDetailsViewModel)
     viewModelOf(::OrdersViewModel)
     viewModelOf(::OrderDetailsViewModel)
+    viewModelOf(::DeliveryViewModel)
 }

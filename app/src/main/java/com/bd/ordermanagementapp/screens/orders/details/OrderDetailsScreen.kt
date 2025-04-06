@@ -49,7 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 fun OrderDetailsScreen(
     viewModel: OrderDetailsViewModel = koinViewModel(),
     orderId: String,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
 
     val state by viewModel.uiState.collectAsState()
@@ -160,7 +160,7 @@ fun OrderDetailsItem(
     modifier: Modifier = Modifier,
     order: Order,
     onCancelClicked: () -> Unit,
-    onConfirmClicked: () -> Unit
+    onConfirmClicked: () -> Unit,
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
@@ -171,6 +171,7 @@ fun OrderDetailsItem(
     ) {
         Column(modifier = Modifier.mediumPadding(includeBottom = true)) {
             KeyValue(key = stringResource(R.string.order_id), value = order.id)
+            KeyValue(key = stringResource(R.string.recipient), value = order.contactName)
             KeyValue(key = stringResource(R.string.statuses), value = order.statusText)
             KeyValue(
                 key = stringResource(R.string.created_time),

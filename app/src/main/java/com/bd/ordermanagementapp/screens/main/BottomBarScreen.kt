@@ -1,8 +1,10 @@
 package com.bd.ordermanagementapp.screens.main
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bd.ordermanagementapp.R
@@ -30,9 +32,15 @@ sealed class BottomBarScreen(
         icon = Icons.Default.LocationOn
     )
 
-    object Delivery : BottomBarScreen(
-        route = "delivery",
-        titleId = R.string.delivery_bottom_bar_title,
-        icon = Icons.Default.LocationOn
+    object DeliveryList : BottomBarScreen(
+        route = "delivery_list",
+        titleId = R.string.delivery_list_bottom_bar_title,
+        icon = Icons.AutoMirrored.Default.List
+    )
+
+    object DeliveryMap : BottomBarScreen(
+        route = "delivery_map",
+        titleId = R.string.delivery_map_bottom_bar_title,
+        icon = Icons.Default.Map
     )
 }
