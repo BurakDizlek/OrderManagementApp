@@ -56,6 +56,7 @@ import java.io.IOException
 fun DeliveryListScreen(
     viewModel: DeliveryViewModel = koinViewModel(),
     navController: NavHostController,
+    parentPadding: PaddingValues,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -104,7 +105,9 @@ fun DeliveryListScreen(
 
                     else -> {
                         LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = parentPadding.calculateBottomPadding()),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
@@ -177,7 +180,7 @@ fun DeliveryOrderItemView(
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "${stringResource(id = R.string.address)}: ",
+                    text = stringResource(id = R.string.detected_address_prefix),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
