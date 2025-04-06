@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -12,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,7 @@ import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
+import com.bd.ordermanagementapp.ui.extensions.largePadding
 import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -36,9 +39,12 @@ fun OrderDetailEntryScreen(
     viewModel: OrderDetailEntryViewModel = koinViewModel(),
     navController: NavController,
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    var address by rememberSaveable { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
     var note by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        viewModel.getAddress()
+    }
 
     OrderManagementAppTheme {
         Scaffold(
@@ -58,12 +64,20 @@ fun OrderDetailEntryScreen(
 
                     ) {
                         OutlinedTextField(
-                            value = address,
-                            onValueChange = { address = it },
-                            label = { Text(text = stringResource(R.string.address)) }
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .largePadding(),
+                            value = uiState.address,
+                            onValueChange = { viewModel.onAddressChanged(it) },
+                            label = { Text(text = stringResource(R.string.address)) },
+                            minLines = 3,
+                            maxLines = 5,
                         )
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
                         OutlinedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = dimensionResource(R.dimen.space_large)),
                             value = note,
                             onValueChange = { note = it },
                             label = { Text(text = stringResource(R.string.note)) },
@@ -71,28 +85,25 @@ fun OrderDetailEntryScreen(
 
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_medium)))
                         Button(
-                            enabled = address.isNotEmpty(),
+                            enabled = uiState.address.isNotEmpty(),
                             onClick = {
-                                viewModel.createOrder(
-                                    address = address,
-                                    note = note
-                                )
+                                viewModel.createOrder(note = note)
                             }) {
                             Text(text = stringResource(R.string.complete))
                         }
                     }
 
-                    if (uiState.value.loading) {
-                        ProgressView()
+                    if (uiState.loading) {
+                        ProgressView(Modifier.align(Alignment.Center))
                     }
 
-                    uiState.value.errorMessage?.let {
+                    uiState.errorMessage?.let {
                         ErrorView(errorMessage = it) {
-                            viewModel.createOrder(address, note)
+                            viewModel.createOrder(note = note)
                         }
                     }
 
-                    uiState.value.createdOrder?.let {
+                    uiState.createdOrder?.let {
                         viewModel.navigated()
                         navController.navigate(CreateOrderRoute.Success(it.id))
                     }

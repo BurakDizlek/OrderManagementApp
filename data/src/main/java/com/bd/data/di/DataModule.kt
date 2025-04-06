@@ -4,6 +4,8 @@ import com.bd.data.repository.campaign.CampaignRepository
 import com.bd.data.repository.campaign.CampaignRepositoryImpl
 import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.cart.CartRepositoryImpl
+import com.bd.data.repository.geocoding.GeocodingRepository
+import com.bd.data.repository.geocoding.GeocodingRepositoryImpl
 import com.bd.data.repository.login.LoginRepository
 import com.bd.data.repository.login.LoginRepositoryImpl
 import com.bd.data.repository.menu.MenuRepository
@@ -22,4 +24,5 @@ val dataModule = module {
     single<LoginRepository> { LoginRepositoryImpl(get()) }
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single { AddToCartUseCase(get()) }
+    single<GeocodingRepository> { GeocodingRepositoryImpl(get()) }
 }

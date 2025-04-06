@@ -8,4 +8,5 @@ data class OrderDetailsUiViewState(
     val errorMessage: String? = null,
     val errorCancelMessage: String? = null,
     val errorConfirmMessage: String? = null,
+    val errorStartDeliveryMessage: String? = null,
 )

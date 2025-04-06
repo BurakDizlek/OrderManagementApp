@@ -30,8 +30,20 @@
             android:theme="@style/Theme.OrderManagementApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- orderapp://order.details/{orderId}-->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="order.details"
+                    android:scheme="orderapp" />
+
             </intent-filter>
         </activity>
     </application>

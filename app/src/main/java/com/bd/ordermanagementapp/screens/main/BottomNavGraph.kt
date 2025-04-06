@@ -37,7 +37,7 @@ fun BottomNavGraph(
         }
 
         composable(route = BottomBarScreen.DeliveryList.route) {
-            DeliveryListScreen(navController = navController)
+            DeliveryListScreen(navController = navController, parentPadding = padding)
         }
         composable(route = BottomBarScreen.DeliveryMap.route) {
             DeliveryMapScreen(navController = navController, parentPadding = padding)

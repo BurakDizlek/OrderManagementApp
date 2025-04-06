@@ -6,4 +6,5 @@ data class OrderDetailEntryUiViewState(
     val loading: Boolean = false,
     val createdOrder: Order? = null,
     val errorMessage: String? = null,
+    val address: String = "",
 )
