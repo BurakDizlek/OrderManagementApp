@@ -32,6 +32,7 @@ import com.bd.ordermanagementapp.screens.orders.details.navigateToOrderDetails
 import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.KeyValue
+import com.bd.ordermanagementapp.ui.components.NotificationPermissionHandler
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
@@ -95,6 +96,7 @@ fun OrdersScreen(viewModel: OrdersViewModel = koinViewModel(), navController: Na
                             fontSize = 16.sp
                         )
                     }
+                    NotificationPermissionHandler()
                 }
             }
         )
