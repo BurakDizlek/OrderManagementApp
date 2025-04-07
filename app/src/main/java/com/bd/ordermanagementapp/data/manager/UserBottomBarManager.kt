@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 interface UserBottomBarManager {
     val bottomBarOptionsFlow: SharedFlow<List<BottomNavItem>>
     val bottomBarStartDestinationRoute: SharedFlow<String>
+    val currentUserType: SharedFlow<UserType>
     suspend fun onCartCountChanged(cartCount: Int)
     suspend fun onUserTypeChanged(userType: UserType)
     suspend fun updateBottomBar()

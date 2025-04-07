@@ -85,4 +85,14 @@
     <string name="start_delivery_dialog_title">Start delivery</string>
     <string name="start_delivery_dialog_message">You are going to start delivery, do you really want to start it?</string>
     <string name="detected_address_prefix">Detected Address: </string>
+    <string name="notification_permission_rationale_dialog_title">Notification Permission Needed</string>
+    <string name="notification_permission_rationale_dialog_text">To receive real-time updates about your order status, please allow notification permission.</string>
+    <string name="notification_permission_allow_button">Allow</string>
+    <string name="notification_permission_maybe_later_button">Maybe Later</string>
+    <string name="notification_permission_settings_dialog_title">Permission Required</string>
+    <string name="notification_permission_settings_dialog_text">Notification permission was denied. To enable notifications, please go to App Settings.</string>
+    <string name="notification_permission_open_settings_button">Open Settings</string>
+    <string name="notification_permission_cancel_button">Cancel</string>
+    <string name="default_notification_channel_id" translatable="false">order_updates_channel</string>
+    <string name="order_notification_channel_name">Order Updates</string>
 </resources>

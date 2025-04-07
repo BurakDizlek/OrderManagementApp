@@ -41,6 +41,7 @@ import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.orders.details.navigateToOrderDetails
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.KeyValue
+import com.bd.ordermanagementapp.ui.components.NotificationPermissionHandler
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
@@ -123,6 +124,7 @@ fun DeliveryListScreen(
                         }
                     }
                 }
+                NotificationPermissionHandler()
             }
         }
 
