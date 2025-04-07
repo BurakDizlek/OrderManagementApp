@@ -11,11 +11,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bd.ordermanagementapp.R
+import com.bd.ordermanagementapp.data.notification.NotificationDataProvider
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private val fcmTokenProvider: NotificationDataProvider by inject()
 
     companion object {
         private const val TAG = "MyFirebaseMsgService"
@@ -49,6 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        fcmTokenProvider.saveFCMToken(token = token)
     }
 
     /**
