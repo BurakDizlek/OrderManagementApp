@@ -20,6 +20,9 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
     override val bottomBarStartDestinationRoute: SharedFlow<String> =
         _bottomBarStartDestinationRoute.asSharedFlow()
 
+    private val _currentUserType = MutableSharedFlow<UserType>(replay = 1)
+    override val currentUserType: SharedFlow<UserType> = _currentUserType.asSharedFlow()
+
     private fun getStartDestinationRoute(): String {
         return when (userType) {
             UserType.RESTAURANT_MANAGER -> {
@@ -53,6 +56,7 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
     }
 
     override suspend fun onUserTypeChanged(userType: UserType) {
+        _currentUserType.emit(userType)
         this.userType = userType
         updateBottomBar()
     }

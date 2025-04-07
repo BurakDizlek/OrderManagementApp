@@ -10,6 +10,8 @@ import com.bd.data.repository.login.LoginRepository
 import com.bd.data.repository.login.LoginRepositoryImpl
 import com.bd.data.repository.menu.MenuRepository
 import com.bd.data.repository.menu.MenuRepositoryImpl
+import com.bd.data.repository.notification.NotificationRepository
+import com.bd.data.repository.notification.NotificationRepositoryImpl
 import com.bd.data.repository.order.OrderRepository
 import com.bd.data.repository.order.OrderRepositoryImpl
 import com.bd.data.usecase.AddToCartUseCase
@@ -25,4 +27,5 @@ val dataModule = module {
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single { AddToCartUseCase(get()) }
     single<GeocodingRepository> { GeocodingRepositoryImpl(get()) }
+    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
 }
