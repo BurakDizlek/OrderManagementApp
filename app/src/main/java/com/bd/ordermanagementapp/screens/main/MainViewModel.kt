@@ -3,6 +3,7 @@ package com.bd.ordermanagementapp.screens.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.core.session.UserType
+import com.bd.data.repository.cart.CartRepository
 import com.bd.data.repository.notification.NotificationRepository
 import com.bd.ordermanagementapp.data.manager.UserBottomBarManager
 import com.bd.ordermanagementapp.data.notification.NotificationDataProvider
@@ -17,6 +18,7 @@ class MainViewModel(
     private val userBottomBarManager: UserBottomBarManager,
     private val notificationDataProvider: NotificationDataProvider,
     private val notificationRepository: NotificationRepository,
+    private val cartRepository: CartRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiViewState())
@@ -43,8 +45,19 @@ class MainViewModel(
         viewModelScope.launch {
             userBottomBarManager.currentUserType.collectLatest { userType ->
                 try {
-                    if (userType != UserType.NOT_DEFINED) {
-                        notificationRepository.saveDevice(notificationDataProvider.getFCMToken())
+                    when (userType) {
+                        UserType.CUSTOMER -> {
+                            notificationRepository.saveDevice(notificationDataProvider.getFCMToken())
+                            cartRepository.mergeCarts()
+                        }
+
+                        UserType.RESTAURANT_MANAGER -> {
+                            notificationRepository.saveDevice(notificationDataProvider.getFCMToken())
+                        }
+
+                        UserType.NOT_DEFINED -> {
+
+                        }
                     }
                 } catch (e: Exception) {
                     print(e.message)

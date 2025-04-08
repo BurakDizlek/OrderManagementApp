@@ -6,6 +6,8 @@ import com.bd.network.service.campaign.CampaignService
 import com.bd.network.service.campaign.CampaignServiceImpl
 import com.bd.network.service.cart.CartService
 import com.bd.network.service.cart.CartServiceImpl
+import com.bd.network.service.cart.PublicCartService
+import com.bd.network.service.cart.PublicCartServiceImpl
 import com.bd.network.service.geocoding.GeocodingService
 import com.bd.network.service.geocoding.GeocodingServiceImpl
 import com.bd.network.service.login.LoginService
@@ -28,4 +30,5 @@ val networkModule = module {
     single<OrderService> { OrderServiceImpl(get()) }
     single<GeocodingService> { GeocodingServiceImpl(get()) }
     single<NotificationService> { NotificationServiceImpl(get()) }
+    single<PublicCartService> { PublicCartServiceImpl(get()) }
 }

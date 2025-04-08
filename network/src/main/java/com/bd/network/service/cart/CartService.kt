@@ -10,4 +10,6 @@ interface CartService {
     suspend fun addToCart(menuItemId: Int): BaseResponse<CartResponse?>
 
     suspend fun deleteFromCart(menuItemId: Int): BaseResponse<CartResponse?>
+
+    suspend fun mergeCarts(): BaseResponse<CartResponse?>
 }
