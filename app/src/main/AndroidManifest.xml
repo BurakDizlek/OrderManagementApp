@@ -25,7 +25,7 @@
             android:value="AIzaSyCQIcwi0UpAOG1Yi4eR3xN1W2JEfqk16Y4" />
 
         <activity
-            android:name=".screens.main.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.OrderManagementApp">
