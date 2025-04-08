@@ -6,4 +6,5 @@ data class JWT(
     val mobileNumber: String,
     val commonName: String,
     val exp: Long,
+    val deviceId: String,
 )

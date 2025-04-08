@@ -10,4 +10,6 @@ interface CartRepository {
     suspend fun addToCart(menuItemId: Int): BaseResult<Cart?>
 
     suspend fun deleteFromCart(menuItemId: Int): BaseResult<Cart?>
+
+    suspend fun mergeCarts(): BaseResult<Cart?>
 }

@@ -42,4 +42,12 @@ class CartServiceImpl(private val client: HttpClient) : CartService {
             }
         }
     }
+
+    override suspend fun mergeCarts(): BaseResponse<CartResponse?> {
+        return handleErrors {
+            client.get("${CART_URL}/merge") {
+                contentType(ContentType.Application.Json)
+            }
+        }
+    }
 }

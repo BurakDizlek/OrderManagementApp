@@ -22,8 +22,8 @@ val dataModule = module {
     includes(networkModule)
     single<CampaignRepository> { CampaignRepositoryImpl(get()) }
     single<MenuRepository> { MenuRepositoryImpl(get()) }
-    single<CartRepository> { CartRepositoryImpl(get()) }
-    single<LoginRepository> { LoginRepositoryImpl(get()) }
+    single<CartRepository> { CartRepositoryImpl(get(), get(), get()) }
+    single<LoginRepository> { LoginRepositoryImpl(get(), get()) }
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single { AddToCartUseCase(get()) }
     single<GeocodingRepository> { GeocodingRepositoryImpl(get()) }

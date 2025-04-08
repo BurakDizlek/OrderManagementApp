@@ -13,4 +13,6 @@ interface SessionManager {
     fun getUserName(): String
 
     fun getUserType(): UserType
+
+    fun getDeviceId(): String
 }

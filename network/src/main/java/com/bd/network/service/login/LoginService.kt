@@ -6,6 +6,7 @@ import com.bd.network.model.LoginResponse
 interface LoginService {
     suspend fun login(
         username: String,
-        password: String
+        password: String,
+        deviceId: String,
     ): BaseResponse<LoginResponse?>
 }
