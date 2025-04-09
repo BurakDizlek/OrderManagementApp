@@ -8,4 +8,6 @@ data class CartUiViewState(
     val errorCart: String? = null,
     val errorAddToCartMessage: String? = null,
     val errorDeleteFromCartMessage: String? = null,
+    val displayNeedLoginDialog: Boolean = false,
+    val navigateToOrder: Boolean = false,
 )
