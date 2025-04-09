@@ -29,7 +29,7 @@ fun BottomNavGraph(
         }
 
         composable(route = BottomBarScreen.Cart.route) {
-            CartScreen(padding = padding)
+            CartScreen(navController = navController,padding = padding)
         }
 
         composable(route = BottomBarScreen.Orders.route) {
