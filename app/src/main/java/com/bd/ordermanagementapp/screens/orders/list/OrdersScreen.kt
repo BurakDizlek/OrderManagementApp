@@ -3,6 +3,7 @@ package com.bd.ordermanagementapp.screens.orders.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,19 +30,23 @@ import com.bd.data.extensions.formatPrice
 import com.bd.data.model.order.Order
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.orders.details.navigateToOrderDetails
-import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.KeyValue
 import com.bd.ordermanagementapp.ui.components.NotificationPermissionHandler
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
+import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
 import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OrdersScreen(viewModel: OrdersViewModel = koinViewModel(), navController: NavHostController) {
+fun OrdersScreen(
+    viewModel: OrdersViewModel = koinViewModel(),
+    navController: NavHostController,
+    parentPadding: PaddingValues,
+) {
 
     val state by viewModel.uiState.collectAsState()
 
@@ -75,7 +80,11 @@ fun OrdersScreen(viewModel: OrdersViewModel = koinViewModel(), navController: Na
                             }
                         }
 
-                        LazyColumn(modifier = Modifier.weight(1f)) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(bottom = parentPadding.calculateBottomPadding())
+                        ) {
                             items(state.orders.size) { index ->
                                 OrderItemView(order = state.orders[index], goToDetails = {
                                     navController.navigateToOrderDetails(orderId = state.orders[index].id)

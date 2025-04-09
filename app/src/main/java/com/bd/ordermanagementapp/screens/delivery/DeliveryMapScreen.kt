@@ -22,10 +22,10 @@ import androidx.navigation.NavHostController
 import com.bd.data.model.order.OrderStatus
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.orders.details.navigateToOrderDetails
-import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
+import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.extensions.largePadding
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 import com.bd.ordermanagementapp.ui.theme.Typography
@@ -38,11 +38,10 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DeliveryMapScreen(
-    viewModel: DeliveryViewModel = koinViewModel(),
+    viewModel: DeliveryViewModel,
     navController: NavHostController,
     parentPadding: PaddingValues,
 ) {
@@ -59,10 +58,6 @@ fun DeliveryMapScreen(
         )
     }
     val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
-
-    LaunchedEffect(Unit) {
-        viewModel.getDeliveryOrders()
-    }
 
     Scaffold(
         topBar = { ToolbarWithTitle(title = stringResource(id = R.string.delivery_map_screen_title)) }
