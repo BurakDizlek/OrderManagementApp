@@ -215,7 +215,7 @@ fun OrderDetailsItem(
             )
             KeyValue(
                 key = stringResource(R.string.content),
-                value = order.orderItems.joinToString(", ") { it.name }
+                value = order.content
             )
             KeyValue(
                 key = stringResource(R.string.total_price_label),

@@ -8,6 +8,7 @@ data class OrderMenuItem(
     val name: String,
     val price: Double,
     val currency: String,
+    val quantity: Int,
 )
 
 fun OrderItem?.toOrderMenuItem(): OrderMenuItem {
@@ -15,6 +16,7 @@ fun OrderItem?.toOrderMenuItem(): OrderMenuItem {
         id = this?.id.orZero(),
         name = this?.name.orEmpty(),
         price = this?.price.orZero(),
-        currency = this?.currency.orEmpty()
+        currency = this?.currency.orEmpty(),
+        quantity = this?.quantity.orZero()
     )
 }

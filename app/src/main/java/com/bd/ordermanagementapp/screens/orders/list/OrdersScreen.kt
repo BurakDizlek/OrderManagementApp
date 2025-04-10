@@ -130,7 +130,7 @@ fun OrderItemView(modifier: Modifier = Modifier, order: Order, goToDetails: () -
             )
             KeyValue(
                 key = stringResource(R.string.content),
-                value = order.orderItems.joinToString(", ") { it.name }
+                value = order.content
             )
             KeyValue(
                 key = stringResource(R.string.total_price_label),

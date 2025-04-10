@@ -1,6 +1,7 @@
 package com.bd.data.model.order
 
 import com.bd.data.model.order.OrderStatus.entries
+import java.util.Locale
 
 enum class OrderStatus {
     OPEN,
@@ -19,4 +20,14 @@ enum class OrderStatus {
             return fromValue(value) ?: OPEN
         }
     }
+}
+
+fun OrderStatus.toName(): String {
+    return name.replace("_", " ")
+        .lowercase()
+        .replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
 }
