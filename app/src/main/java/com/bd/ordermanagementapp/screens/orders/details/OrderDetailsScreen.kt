@@ -58,6 +58,7 @@ fun OrderDetailsScreen(
     var showCancelDialog by remember { mutableStateOf(false) }
     var showConfirmDialog by remember { mutableStateOf(false) }
     var showStartDeliveryDialog by remember { mutableStateOf(false) }
+    var showRejectDialog by remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -93,6 +94,8 @@ fun OrderDetailsScreen(
                             isManager = viewModel.isManager(),
                             onStartDeliveryClicked = {
                                 showStartDeliveryDialog = true
+                            }, onRejectClicked = {
+                                showRejectDialog = true
                             }
                         )
                     }
@@ -158,6 +161,23 @@ fun OrderDetailsScreen(
                         )
                     }
 
+                    if (showRejectDialog) {
+                        DecisionDialog(
+                            title = stringResource(R.string.reject_order_dialog_title),
+                            message = stringResource(R.string.reject_order_dialog_message),
+                            rightButtonClick = {
+                                viewModel.cancelOrder(orderId = orderId)
+                            },
+                            leftButtonClick = {
+                            },
+                            onDismiss = {
+                                showRejectDialog = false
+                            },
+                            rightButtonText = stringResource(R.string.yes),
+                            leftButtonText = stringResource(R.string.no)
+                        )
+                    }
+
                     // error messages
                     state.errorCancelMessage?.let {
                         scope.launch {
@@ -193,6 +213,7 @@ fun OrderDetailsItem(
     onConfirmClicked: () -> Unit,
     isManager: Boolean = false,
     onStartDeliveryClicked: () -> Unit,
+    onRejectClicked: () -> Unit,
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.space_small)),
@@ -239,13 +260,13 @@ fun OrderDetailsItem(
                     modifier = Modifier
                         .align(Alignment.End)
                 ) {
-                    Button(
-                        onClick = onCancelClicked,
-                        colors = ButtonDefaults.buttonColors(Color.Red)
-                    ) {
-                        Text(text = stringResource(R.string.cancel))
-                    }
                     if (isManager) {
+                        Button(
+                            onClick = onRejectClicked,
+                            colors = ButtonDefaults.buttonColors(Color.Red)
+                        ) {
+                            Text(text = stringResource(R.string.reject))
+                        }
                         Button(
                             onClick = onStartDeliveryClicked,
                             colors = ButtonDefaults.buttonColors(Color.Yellow)
@@ -254,6 +275,13 @@ fun OrderDetailsItem(
                                 text = stringResource(R.string.start_delivery),
                                 color = Color.Black
                             )
+                        }
+                    } else {
+                        Button(
+                            onClick = onCancelClicked,
+                            colors = ButtonDefaults.buttonColors(Color.Red)
+                        ) {
+                            Text(text = stringResource(R.string.cancel))
                         }
                     }
                 }
