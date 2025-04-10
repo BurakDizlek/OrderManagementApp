@@ -67,6 +67,8 @@
     <string name="no">No</string>
     <string name="cancel_order_dialog_title">Cancel Order</string>
     <string name="cancel_order_dialog_message">Your order will be cancelled. Do you really want to cancel it?</string>
+    <string name="reject_order_dialog_title">Reject Order</string>
+    <string name="reject_order_dialog_message">You will reject this order. Do you really want to reject it?</string>
     <string name="confirm_order_received_dialog_title">Confirm Order Received</string>
     <string name="confirm_order_received_dialog_message">Please confirm you have received your order.</string>
     <string name="delivery_list_screen_title">Delivery List</string>
