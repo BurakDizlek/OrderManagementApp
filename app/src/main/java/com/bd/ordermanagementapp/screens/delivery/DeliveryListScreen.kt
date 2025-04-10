@@ -46,7 +46,6 @@ import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.extensions.smallPadding
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,68 +64,65 @@ fun DeliveryListScreen(
         viewModel.getDeliveryOrders()
     }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(title = stringResource(id = R.string.delivery_list_screen_title))
-            }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-            ) {
-                OrderFilterComponent(
-                    initialFilter = uiState.filterData,
-                    onFilterChanged = { newFilter -> viewModel.onFilterChanged(newFilter) }
-                )
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(title = stringResource(id = R.string.delivery_list_screen_title))
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            OrderFilterComponent(
+                initialFilter = uiState.filterData,
+                onFilterChanged = { newFilter -> viewModel.onFilterChanged(newFilter) }
+            )
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                when {
-                    uiState.loading -> {
-                        ProgressView()
+            when {
+                uiState.loading -> {
+                    ProgressView()
+                }
+
+                uiState.errorMessage != null -> {
+                    ErrorView(uiState.errorMessage.orEmpty()) {
+                        viewModel.getDeliveryOrders()
                     }
+                }
 
-                    uiState.errorMessage != null -> {
-                        ErrorView(uiState.errorMessage.orEmpty()) {
-                            viewModel.getDeliveryOrders()
-                        }
+                uiState.orders.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(R.string.there_are_no_orders))
                     }
+                }
 
-                    uiState.orders.isEmpty() -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(stringResource(R.string.there_are_no_orders))
-                        }
-                    }
-
-                    else -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(bottom = parentPadding.calculateBottomPadding()),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(uiState.orders, key = { it.id }) { order ->
-                                DeliveryOrderItemView(
-                                    order = order,
-                                    context = context,
-                                    goToDetails = {
-                                        navController.navigateToOrderDetails(orderId = order.id)
-                                    }
-                                )
-                            }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = parentPadding.calculateBottomPadding()),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(uiState.orders, key = { it.id }) { order ->
+                            DeliveryOrderItemView(
+                                order = order,
+                                context = context,
+                                goToDetails = {
+                                    navController.navigateToOrderDetails(orderId = order.id)
+                                }
+                            )
                         }
                     }
                 }
-                NotificationPermissionHandler()
             }
+            NotificationPermissionHandler()
         }
-
     }
 }
 

@@ -25,7 +25,6 @@ import com.bd.data.extensions.orZero
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -40,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LocationPickerScreen(
     viewModel: LocationPickerViewModel = koinViewModel(),
     navController: NavController,
-    data: CreateOrderRoute.Starter
+    data: CreateOrderRoute.Starter,
 ) {
     val context = LocalContext.current
     val locationPermissionState =
@@ -54,91 +53,89 @@ fun LocationPickerScreen(
         }
     }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(
-                    stringResource(R.string.location_picker_title),
-                    navigationControllerToPopBack = navController
-                )
-            },
-            content = { padding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                ) {
-                    if (locationPermissionState.status.isGranted) {
-                        GoogleMap(
-                            modifier = Modifier.weight(1f),
-                            cameraPositionState = viewModel.cameraPositionState.value,
-                            onMapClick = { latLng -> viewModel.onMapClick(latLng) }
-                        ) {
-                            pickedLocation?.let {
-                                Marker(
-                                    state = MarkerState(position = it),
-                                    title = stringResource(R.string.location_picker_marker_text)
-                                )
-                            }
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(
+                stringResource(R.string.location_picker_title),
+                navigationControllerToPopBack = navController
+            )
+        },
+        content = { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                if (locationPermissionState.status.isGranted) {
+                    GoogleMap(
+                        modifier = Modifier.weight(1f),
+                        cameraPositionState = viewModel.cameraPositionState.value,
+                        onMapClick = { latLng -> viewModel.onMapClick(latLng) }
+                    ) {
+                        pickedLocation?.let {
+                            Marker(
+                                state = MarkerState(position = it),
+                                title = stringResource(R.string.location_picker_marker_text)
+                            )
                         }
-                        Row(
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(dimensionResource(R.dimen.space_medium)),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(dimensionResource(R.dimen.space_medium)),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
+                                .weight(1f),
 
-                                onClick = {
-                                    if (locationPermissionState.status.isGranted) {
-                                        viewModel.setPickedLocationWithCurrent()
-                                    }
-                                }) {
-                                Text(stringResource(R.string.current_location))
-                            }
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                onClick = {
-                                    val confirmedLocation = viewModel.confirmLocation()
-                                    navController.navigate(
-                                        CreateOrderRoute.DetailEntry(
-                                            isQuickOrder = data.isQuickOrder,
-                                            menuItemId = data.menuItemId,
-                                            longitude = confirmedLocation?.longitude.orZero(),
-                                            latitude = confirmedLocation?.latitude.orZero()
-                                        )
-                                    )
-                                }) {
-                                Text(stringResource(R.string.confirm))
-                            }
-                        }
-                    } else {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            val textToShow =
-                                if (locationPermissionState.status.shouldShowRationale) {
-                                    stringResource(R.string.location_permission_needed_to_send_delivery)
-                                } else {
-                                    stringResource(R.string.location_permission_denied_message)
+                            onClick = {
+                                if (locationPermissionState.status.isGranted) {
+                                    viewModel.setPickedLocationWithCurrent()
                                 }
-                            Text(textToShow)
-                            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
-                            Button(onClick = { locationPermissionState.launchPermissionRequest() }) {
-                                Text(stringResource(R.string.request_permission))
+                            }) {
+                            Text(stringResource(R.string.current_location))
+                        }
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            onClick = {
+                                val confirmedLocation = viewModel.confirmLocation()
+                                navController.navigate(
+                                    CreateOrderRoute.DetailEntry(
+                                        isQuickOrder = data.isQuickOrder,
+                                        menuItemId = data.menuItemId,
+                                        longitude = confirmedLocation?.longitude.orZero(),
+                                        latitude = confirmedLocation?.latitude.orZero()
+                                    )
+                                )
+                            }) {
+                            Text(stringResource(R.string.confirm))
+                        }
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val textToShow =
+                            if (locationPermissionState.status.shouldShowRationale) {
+                                stringResource(R.string.location_permission_needed_to_send_delivery)
+                            } else {
+                                stringResource(R.string.location_permission_denied_message)
                             }
+                        Text(textToShow)
+                        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
+                        Button(onClick = { locationPermissionState.launchPermissionRequest() }) {
+                            Text(stringResource(R.string.request_permission))
                         }
                     }
                 }
             }
-        )
-    }
+        }
+    )
 }

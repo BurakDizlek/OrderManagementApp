@@ -38,7 +38,6 @@ import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.components.filter.OrderFilterComponent
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -54,62 +53,60 @@ fun OrdersScreen(
         viewModel.getOrders()
     }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(stringResource(R.string.orders_screen_title))
-            },
-            content = { padding ->
-                Box(
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize()
-                        .background(DustyWhite)
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        OrderFilterComponent(
-                            initialFilter = state.filterData,
-                            onFilterChanged = { newFilter ->
-                                viewModel.onFilterDataChanged(filterOrderData = newFilter)
-                            }
-                        )
-
-                        state.errorMessage?.let {
-                            ErrorView(it) {
-                                viewModel.getOrders()
-                            }
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(stringResource(R.string.orders_screen_title))
+        },
+        content = { padding ->
+            Box(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+                    .background(DustyWhite)
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    OrderFilterComponent(
+                        initialFilter = state.filterData,
+                        onFilterChanged = { newFilter ->
+                            viewModel.onFilterDataChanged(filterOrderData = newFilter)
                         }
+                    )
 
-                        LazyColumn(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(bottom = parentPadding.calculateBottomPadding())
-                        ) {
-                            items(state.orders.size) { index ->
-                                OrderItemView(order = state.orders[index], goToDetails = {
-                                    navController.navigateToOrderDetails(orderId = state.orders[index].id)
-                                })
-                            }
+                    state.errorMessage?.let {
+                        ErrorView(it) {
+                            viewModel.getOrders()
                         }
                     }
 
-                    if (state.loading) {
-                        ProgressView(modifier = Modifier.align(Alignment.Center))
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(bottom = parentPadding.calculateBottomPadding())
+                    ) {
+                        items(state.orders.size) { index ->
+                            OrderItemView(order = state.orders[index], goToDetails = {
+                                navController.navigateToOrderDetails(orderId = state.orders[index].id)
+                            })
+                        }
                     }
-
-                    if (state.isOrdersEmpty) {
-                        Text(
-                            text = stringResource(R.string.there_are_no_orders),
-                            modifier = Modifier.align(Alignment.Center),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontSize = 16.sp
-                        )
-                    }
-                    NotificationPermissionHandler()
                 }
+
+                if (state.loading) {
+                    ProgressView(modifier = Modifier.align(Alignment.Center))
+                }
+
+                if (state.isOrdersEmpty) {
+                    Text(
+                        text = stringResource(R.string.there_are_no_orders),
+                        modifier = Modifier.align(Alignment.Center),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 16.sp
+                    )
+                }
+                NotificationPermissionHandler()
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable

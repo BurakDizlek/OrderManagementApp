@@ -23,12 +23,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -37,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
-    navigationController: NavController
+    navigationController: NavController,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
@@ -45,60 +43,58 @@ fun LoginScreen(
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(
-                    title = stringResource(R.string.login_screen_title),
-                    navigationControllerToPopBack = navigationController
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(
+                title = stringResource(R.string.login_screen_title),
+                navigationControllerToPopBack = navigationController
+            )
+        },
+        content = { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text(text = stringResource(R.string.login_username)) }
                 )
-            },
-            content = { padding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    OutlinedTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        label = { Text(text = stringResource(R.string.login_username)) }
-                    )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text(text = stringResource(R.string.login_password)) },
-                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation()
-                    )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_medium)))
-                    Button(onClick = { viewModel.login(username, password) }) {
-                        Text(text = stringResource(R.string.login))
-                    }
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text(text = stringResource(R.string.login_password)) },
+                    visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation()
+                )
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_medium)))
+                Button(onClick = { viewModel.login(username, password) }) {
+                    Text(text = stringResource(R.string.login))
+                }
 
-                    if (uiState.loading) {
-                        ProgressView()
-                    }
+                if (uiState.loading) {
+                    ProgressView()
+                }
 
-                    uiState.successMessage?.let {
-                        Text(text = it)
-                    }
+                uiState.successMessage?.let {
+                    Text(text = it)
+                }
 
-                    uiState.loggedInUserType?.let {
-                        scope.launch {
-                            delay(1000)
-                            navigationController.popBackStack()
-                        }
-                    }
-
-                    uiState.errorMessage?.let {
-                        Text(text = it)
+                uiState.loggedInUserType?.let {
+                    scope.launch {
+                        delay(1000)
+                        navigationController.popBackStack()
                     }
                 }
-            })
-    }
+
+                uiState.errorMessage?.let {
+                    Text(text = it)
+                }
+            }
+        })
 }
 
 @Composable

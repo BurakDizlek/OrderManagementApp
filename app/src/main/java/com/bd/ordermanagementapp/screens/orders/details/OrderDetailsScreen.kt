@@ -42,7 +42,6 @@ import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -67,142 +66,140 @@ fun OrderDetailsScreen(
         viewModel.getOrderId(orderId = orderId)
     }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(
-                    title = stringResource(R.string.order_details_title),
-                    navigationControllerToPopBack = navController
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-            content = { padding ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                        .background(DustyWhite)
-                ) {
-                    state.order?.let {
-                        OrderDetailsItem(
-                            order = it,
-                            onCancelClicked = {
-                                showCancelDialog = true
-                            }, onConfirmClicked = {
-                                showConfirmDialog = true
-                            },
-                            isManager = viewModel.isManager(),
-                            onStartDeliveryClicked = {
-                                showStartDeliveryDialog = true
-                            }, onRejectClicked = {
-                                showRejectDialog = true
-                            }
-                        )
-                    }
-
-                    if (state.loading) {
-                        ProgressView(modifier = Modifier.align(Alignment.Center))
-                    }
-
-                    state.errorMessage?.let {
-                        ErrorView(it) {
-                            viewModel.getOrderId(orderId)
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(
+                title = stringResource(R.string.order_details_title),
+                navigationControllerToPopBack = navController
+            )
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        content = { padding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .background(DustyWhite)
+            ) {
+                state.order?.let {
+                    OrderDetailsItem(
+                        order = it,
+                        onCancelClicked = {
+                            showCancelDialog = true
+                        }, onConfirmClicked = {
+                            showConfirmDialog = true
+                        },
+                        isManager = viewModel.isManager(),
+                        onStartDeliveryClicked = {
+                            showStartDeliveryDialog = true
+                        }, onRejectClicked = {
+                            showRejectDialog = true
                         }
-                    }
+                    )
+                }
 
-                    if (showCancelDialog) {
-                        DecisionDialog(
-                            title = stringResource(R.string.cancel_order_dialog_title),
-                            message = stringResource(R.string.cancel_order_dialog_message),
-                            rightButtonClick = {
-                                viewModel.cancelOrder(orderId = orderId)
-                            },
-                            leftButtonClick = {
-                            },
-                            onDismiss = {
-                                showCancelDialog = false
-                            },
-                            rightButtonText = stringResource(R.string.yes),
-                            leftButtonText = stringResource(R.string.no)
-                        )
-                    }
+                if (state.loading) {
+                    ProgressView(modifier = Modifier.align(Alignment.Center))
+                }
 
-                    if (showConfirmDialog) {
-                        DecisionDialog(
-                            title = stringResource(R.string.confirm_order_received_dialog_title),
-                            message = stringResource(R.string.confirm_order_received_dialog_message),
-                            rightButtonClick = {
-                                viewModel.confirmOrderReceived(orderId = orderId)
-                            },
-                            leftButtonClick = {
-                            },
-                            onDismiss = {
-                                showConfirmDialog = false
-                            },
-                            rightButtonText = stringResource(R.string.yes),
-                            leftButtonText = stringResource(R.string.no)
-                        )
+                state.errorMessage?.let {
+                    ErrorView(it) {
+                        viewModel.getOrderId(orderId)
                     }
+                }
 
-                    if (showStartDeliveryDialog) {
-                        DecisionDialog(
-                            title = stringResource(R.string.start_delivery_dialog_title),
-                            message = stringResource(R.string.start_delivery_dialog_message),
-                            rightButtonClick = {
-                                viewModel.startDelivery(orderId = orderId)
-                            },
-                            leftButtonClick = {
-                            },
-                            onDismiss = {
-                                showStartDeliveryDialog = false
-                            },
-                            rightButtonText = stringResource(R.string.yes),
-                            leftButtonText = stringResource(R.string.no)
-                        )
+                if (showCancelDialog) {
+                    DecisionDialog(
+                        title = stringResource(R.string.cancel_order_dialog_title),
+                        message = stringResource(R.string.cancel_order_dialog_message),
+                        rightButtonClick = {
+                            viewModel.cancelOrder(orderId = orderId)
+                        },
+                        leftButtonClick = {
+                        },
+                        onDismiss = {
+                            showCancelDialog = false
+                        },
+                        rightButtonText = stringResource(R.string.yes),
+                        leftButtonText = stringResource(R.string.no)
+                    )
+                }
+
+                if (showConfirmDialog) {
+                    DecisionDialog(
+                        title = stringResource(R.string.confirm_order_received_dialog_title),
+                        message = stringResource(R.string.confirm_order_received_dialog_message),
+                        rightButtonClick = {
+                            viewModel.confirmOrderReceived(orderId = orderId)
+                        },
+                        leftButtonClick = {
+                        },
+                        onDismiss = {
+                            showConfirmDialog = false
+                        },
+                        rightButtonText = stringResource(R.string.yes),
+                        leftButtonText = stringResource(R.string.no)
+                    )
+                }
+
+                if (showStartDeliveryDialog) {
+                    DecisionDialog(
+                        title = stringResource(R.string.start_delivery_dialog_title),
+                        message = stringResource(R.string.start_delivery_dialog_message),
+                        rightButtonClick = {
+                            viewModel.startDelivery(orderId = orderId)
+                        },
+                        leftButtonClick = {
+                        },
+                        onDismiss = {
+                            showStartDeliveryDialog = false
+                        },
+                        rightButtonText = stringResource(R.string.yes),
+                        leftButtonText = stringResource(R.string.no)
+                    )
+                }
+
+                if (showRejectDialog) {
+                    DecisionDialog(
+                        title = stringResource(R.string.reject_order_dialog_title),
+                        message = stringResource(R.string.reject_order_dialog_message),
+                        rightButtonClick = {
+                            viewModel.cancelOrder(orderId = orderId)
+                        },
+                        leftButtonClick = {
+                        },
+                        onDismiss = {
+                            showRejectDialog = false
+                        },
+                        rightButtonText = stringResource(R.string.yes),
+                        leftButtonText = stringResource(R.string.no)
+                    )
+                }
+
+                // error messages
+                state.errorCancelMessage?.let {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(it)
+                        viewModel.clearCancelErrorMessage()
                     }
+                }
 
-                    if (showRejectDialog) {
-                        DecisionDialog(
-                            title = stringResource(R.string.reject_order_dialog_title),
-                            message = stringResource(R.string.reject_order_dialog_message),
-                            rightButtonClick = {
-                                viewModel.cancelOrder(orderId = orderId)
-                            },
-                            leftButtonClick = {
-                            },
-                            onDismiss = {
-                                showRejectDialog = false
-                            },
-                            rightButtonText = stringResource(R.string.yes),
-                            leftButtonText = stringResource(R.string.no)
-                        )
+                state.errorConfirmMessage?.let {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(it)
+                        viewModel.clearConfirmErrorMessage()
                     }
+                }
 
-                    // error messages
-                    state.errorCancelMessage?.let {
-                        scope.launch {
-                            snackBarHostState.showSnackbar(it)
-                            viewModel.clearCancelErrorMessage()
-                        }
-                    }
-
-                    state.errorConfirmMessage?.let {
-                        scope.launch {
-                            snackBarHostState.showSnackbar(it)
-                            viewModel.clearConfirmErrorMessage()
-                        }
-                    }
-
-                    state.errorStartDeliveryMessage?.let {
-                        scope.launch {
-                            snackBarHostState.showSnackbar(it)
-                            viewModel.clearStartDeliveryErrorMessage()
-                        }
+                state.errorStartDeliveryMessage?.let {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(it)
+                        viewModel.clearStartDeliveryErrorMessage()
                     }
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable

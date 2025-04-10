@@ -24,14 +24,13 @@ import com.bd.ordermanagementapp.ui.components.ErrorView
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CampaignDetailsScreen(
     viewModel: CampaignDetailsViewModel = koinViewModel(),
     navController: NavHostController,
-    data: CampaignDetailsScreenData?
+    data: CampaignDetailsScreenData?,
 ) {
 
     val state by viewModel.uiState.collectAsState()
@@ -47,65 +46,63 @@ fun CampaignDetailsScreen(
         }
     }
 
-    OrderManagementAppTheme {
-        Scaffold(topBar = {
-            ToolbarWithTitle(
-                title = stringResource(R.string.campaign_details_title),
-                navigationControllerToPopBack = navController
-            )
-        }, content = { padding ->
-            Box(
+    Scaffold(topBar = {
+        ToolbarWithTitle(
+            title = stringResource(R.string.campaign_details_title),
+            navigationControllerToPopBack = navController
+        )
+    }, content = { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(DustyWhite)
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
-                    .background(DustyWhite)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    data?.image?.let { imageUrl ->
-                        BannerCard(
-                            imageUrl = imageUrl,
-                            cardTitle = data.name,
-                            description = data.description,
-                        )
-                    }
+                data?.image?.let { imageUrl ->
+                    BannerCard(
+                        imageUrl = imageUrl,
+                        cardTitle = data.name,
+                        description = data.description,
+                    )
+                }
 
-                    state.menuItems.forEachIndexed { index, menuItem ->
-                        if (index % 2 == 0) {
-                            Row {
-                                // First item in the row
-                                MenuItemView(menuItem, viewModel)
-                                if (index < state.menuItems.size - 1) {
-                                    MenuItemView(
-                                        state.menuItems[index + 1],
-                                        viewModel
-                                    )
-                                }
+                state.menuItems.forEachIndexed { index, menuItem ->
+                    if (index % 2 == 0) {
+                        Row {
+                            // First item in the row
+                            MenuItemView(menuItem, viewModel)
+                            if (index < state.menuItems.size - 1) {
+                                MenuItemView(
+                                    state.menuItems[index + 1],
+                                    viewModel
+                                )
                             }
                         }
                     }
-
-                    if (state.loadingMenuItems) {
-                        ProgressView()
-                    }
-
-                    if (state.errorMenuItems?.isNotEmpty() == true) {
-                        ErrorView(errorMessage = state.errorMenuItems.orEmpty()) {
-                            viewModel.fetchMenuItems(data?.menuItemIds.orEmpty())
-                        }
-                    }
                 }
 
-                if (state.showDataNullError) {
-                    ErrorView(stringResource(R.string.campaign_details_data_null)) {
-                        navController.popBackStack()
+                if (state.loadingMenuItems) {
+                    ProgressView()
+                }
+
+                if (state.errorMenuItems?.isNotEmpty() == true) {
+                    ErrorView(errorMessage = state.errorMenuItems.orEmpty()) {
+                        viewModel.fetchMenuItems(data?.menuItemIds.orEmpty())
                     }
                 }
-                HomeCommonView(commonState, viewModel, navController)
             }
-        })
-    }
+
+            if (state.showDataNullError) {
+                ErrorView(stringResource(R.string.campaign_details_data_null)) {
+                    navController.popBackStack()
+                }
+            }
+            HomeCommonView(commonState, viewModel, navController)
+        }
+    })
 }

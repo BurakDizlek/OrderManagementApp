@@ -34,7 +34,6 @@ import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.components.ToolbarWithTitle
 import com.bd.ordermanagementapp.ui.extensions.largePadding
-import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -54,72 +53,70 @@ fun OrderDetailEntryScreen(
         viewModel.getAddress()
     }
 
-    OrderManagementAppTheme {
-        Scaffold(
-            topBar = {
-                ToolbarWithTitle(
-                    stringResource(R.string.order_detail_entry_title),
-                    navigationControllerToPopBack = navController
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) }, content = { padding ->
-                Box {
-                    Column(
+    Scaffold(
+        topBar = {
+            ToolbarWithTitle(
+                stringResource(R.string.order_detail_entry_title),
+                navigationControllerToPopBack = navController
+            )
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }, content = { padding ->
+            Box {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+                    OutlinedTextField(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxWidth()
+                            .largePadding(),
+                        value = uiState.address,
+                        onValueChange = { viewModel.onAddressChanged(it) },
+                        label = { Text(text = stringResource(R.string.address)) },
+                        minLines = 3,
+                        maxLines = 5,
+                    )
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = dimensionResource(R.dimen.space_large)),
+                        value = note,
+                        onValueChange = { note = it },
+                        label = { Text(text = stringResource(R.string.note)) },
+                    )
 
-                    ) {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .largePadding(),
-                            value = uiState.address,
-                            onValueChange = { viewModel.onAddressChanged(it) },
-                            label = { Text(text = stringResource(R.string.address)) },
-                            minLines = 3,
-                            maxLines = 5,
-                        )
-                        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_small)))
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = dimensionResource(R.dimen.space_large)),
-                            value = note,
-                            onValueChange = { note = it },
-                            label = { Text(text = stringResource(R.string.note)) },
-                        )
-
-                        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_medium)))
-                        Button(
-                            enabled = uiState.address.isNotEmpty(),
-                            onClick = {
-                                viewModel.createOrder(note = note)
-                            }) {
-                            Text(text = stringResource(R.string.complete))
-                        }
-                    }
-
-                    if (uiState.loading) {
-                        ProgressView(Modifier.align(Alignment.Center))
-                    }
-
-                    uiState.errorMessage?.let {
-                        scope.launch {
-                            keyboardController?.hide()
-                            snackBarHostState.showSnackbar(message = it)
-                            viewModel.clearCreateOrderErrorMessage()
-                        }
-                    }
-
-                    uiState.createdOrder?.let {
-                        viewModel.navigated()
-                        navController.navigate(CreateOrderRoute.Success(it.id))
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_medium)))
+                    Button(
+                        enabled = uiState.address.isNotEmpty(),
+                        onClick = {
+                            viewModel.createOrder(note = note)
+                        }) {
+                        Text(text = stringResource(R.string.complete))
                     }
                 }
+
+                if (uiState.loading) {
+                    ProgressView(Modifier.align(Alignment.Center))
+                }
+
+                uiState.errorMessage?.let {
+                    scope.launch {
+                        keyboardController?.hide()
+                        snackBarHostState.showSnackbar(message = it)
+                        viewModel.clearCreateOrderErrorMessage()
+                    }
+                }
+
+                uiState.createdOrder?.let {
+                    viewModel.navigated()
+                    navController.navigate(CreateOrderRoute.Success(it.id))
+                }
             }
-        )
-    }
+        }
+    )
 }
