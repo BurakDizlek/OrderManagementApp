@@ -39,8 +39,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun OrderFilterComponent(
     modifier: Modifier = Modifier,
-    initialFilter: FilterOrderData = FilterOrderData(),
-    onFilterChanged: (FilterOrderData) -> Unit
+    initialFilter: FilterOrderData,
+    onFilterChanged: (FilterOrderData) -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf(initialFilter.query.orEmpty()) }
     var selectedStatuses by rememberSaveable(
@@ -55,6 +55,22 @@ fun OrderFilterComponent(
     var toTimeMillis by rememberSaveable { mutableStateOf(initialFilter.toTime) }
 
     var showFilterDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(initialFilter) {
+        if (query != initialFilter.query.orEmpty()) {
+            query = initialFilter.query.orEmpty()
+        }
+        val initialStatusesSet = initialFilter.statuses?.toSet() ?: emptySet()
+        if (selectedStatuses != initialStatusesSet) {
+            selectedStatuses = initialStatusesSet
+        }
+        if (fromTimeMillis != initialFilter.fromTime) {
+            fromTimeMillis = initialFilter.fromTime
+        }
+        if (toTimeMillis != initialFilter.toTime) {
+            toTimeMillis = initialFilter.toTime
+        }
+    }
 
     LaunchedEffect(query) {
         delay(350) // Wait 350ms after the last query change
@@ -133,7 +149,7 @@ fun OrderFilterComponent(
 
 private fun <T : Enum<T>> ListSaver(
     toString: (T) -> String,
-    fromString: (String) -> T?
+    fromString: (String) -> T?,
 ): Saver<MutableState<Set<T>>, List<String>> {
     return Saver(
         save = { state -> state.value.map(toString) },

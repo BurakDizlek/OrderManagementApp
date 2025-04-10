@@ -17,6 +17,6 @@ data class OrdersUiViewState(
         query = null,
         fromTime = System.currentTimeMillis().ensureStartOfDay(),
         toTime = System.currentTimeMillis().ensureEndOfDay(),
-        statuses = listOf(OrderStatus.OPEN)
+        statuses = listOf(OrderStatus.OPEN, OrderStatus.ON_THE_WAY)
     )
 )

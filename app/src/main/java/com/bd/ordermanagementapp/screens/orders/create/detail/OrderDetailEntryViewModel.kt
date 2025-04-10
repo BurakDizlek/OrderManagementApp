@@ -8,6 +8,7 @@ import com.bd.data.model.ResultCodes
 import com.bd.data.model.order.CreateOrderData
 import com.bd.data.repository.geocoding.GeocodingRepository
 import com.bd.data.repository.order.OrderRepository
+import com.bd.ordermanagementapp.data.manager.UserBottomBarManager
 import com.bd.ordermanagementapp.screens.orders.create.CreateOrderRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ class OrderDetailEntryViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: OrderRepository,
     private val geocodingRepository: GeocodingRepository,
+    private val userBottomBarManager: UserBottomBarManager,
 ) : ViewModel() {
 
     val argsData = savedStateHandle.toRoute<CreateOrderRoute.DetailEntry>()
@@ -27,9 +29,10 @@ class OrderDetailEntryViewModel(
     val uiState: StateFlow<OrderDetailEntryUiViewState> = _uiState.asStateFlow()
 
     fun createOrder(note: String) {
-        try {
-            _uiState.update { it.copy(loading = true, errorMessage = null) }
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(loading = true, errorMessage = null) }
+
                 val result = repository.createOrder(
                     CreateOrderData(
                         isQuickOrder = argsData.isQuickOrder,
@@ -43,13 +46,20 @@ class OrderDetailEntryViewModel(
 
                 if (result.code == ResultCodes.SUCCESS) {
                     _uiState.update { it.copy(loading = false, createdOrder = result.data) }
+                    if (!argsData.isQuickOrder) {
+                        userBottomBarManager.onCartCountChanged(0)
+                    }
                 } else {
                     _uiState.update { it.copy(loading = false, errorMessage = result.message) }
                 }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(loading = false, errorMessage = e.message) }
             }
-        } catch (e: Exception) {
-            _uiState.update { it.copy(loading = false, errorMessage = e.message) }
         }
+    }
+
+    fun clearCreateOrderErrorMessage() {
+        _uiState.update { it.copy(errorMessage = null) }
     }
 
     fun navigated() {
@@ -58,13 +68,11 @@ class OrderDetailEntryViewModel(
 
     fun getAddress() {
         viewModelScope.launch {
-            _uiState.update { it.copy(loading = true, errorMessage = null) }
+            _uiState.update { it.copy(loading = true) }
             try {
-                val result =
-                    geocodingRepository.getAddress(
-                        latitude = argsData.latitude,
-                        longitude = argsData.longitude
-                    )
+                val result = geocodingRepository.getAddress(
+                    latitude = argsData.latitude, longitude = argsData.longitude
+                )
                 onAddressChanged(result?.data.orEmpty())
             } catch (e: Exception) {
             } finally {

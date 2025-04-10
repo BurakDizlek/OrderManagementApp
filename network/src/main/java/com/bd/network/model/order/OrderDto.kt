@@ -17,7 +17,7 @@ data class OrderDto(
     val statusText: String?,
     val orderCreatedTime: Long?,
     val statusChangedTime: Long?,
-    val note: String? = null
+    val note: String? = null,
 )
 
 @Serializable
@@ -26,4 +26,5 @@ data class OrderItem(
     val name: String?,
     val price: Double?,
     val currency: String?,
+    val quantity: Int?,
 )

@@ -50,12 +50,11 @@ import com.bd.ordermanagementapp.ui.theme.OrderManagementAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.compose.koinViewModel
 import java.io.IOException
 
 @Composable
 fun DeliveryListScreen(
-    viewModel: DeliveryViewModel = koinViewModel(),
+    viewModel: DeliveryViewModel,
     navController: NavHostController,
     parentPadding: PaddingValues,
 ) {

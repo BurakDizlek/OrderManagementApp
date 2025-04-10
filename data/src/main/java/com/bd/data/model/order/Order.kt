@@ -17,7 +17,8 @@ data class Order(
     val statusText: String,
     val orderCreatedTime: Long,
     val statusChangedTime: Long,
-    val note: String? = null
+    val note: String? = null,
+    val content: String,
 )
 
 fun OrderDto?.toOrder(): Order {
@@ -35,6 +36,9 @@ fun OrderDto?.toOrder(): Order {
         statusText = this?.statusText.orEmpty(),
         orderCreatedTime = this?.orderCreatedTime.orZero(),
         statusChangedTime = this?.statusChangedTime.orZero(),
-        note = this?.note.orEmpty()
+        note = this?.note.orEmpty(),
+        content = this?.orderItems?.joinToString(", ") { item ->
+            "${if (item.quantity.orZero() > 1) "${item.quantity} x " else ""}${item.name}"
+        }.orEmpty()
     )
 }

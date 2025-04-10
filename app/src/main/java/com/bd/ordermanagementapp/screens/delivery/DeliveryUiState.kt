@@ -17,6 +17,8 @@ data class DeliveryUiState(
         statuses = listOf(
             OrderStatus.OPEN,
             OrderStatus.ON_THE_WAY,
+            OrderStatus.CANCELED,
+            OrderStatus.COMPLETED,
         )
     ),
 )

@@ -36,8 +36,8 @@ import com.bd.data.extensions.ensureStartOfDay
 import com.bd.data.extensions.formatMillisDate
 import com.bd.data.extensions.orZero
 import com.bd.data.model.order.OrderStatus
+import com.bd.data.model.order.toName
 import com.bd.ordermanagementapp.R
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -101,15 +101,7 @@ internal fun FilterDialog(
                                 }
                             },
                             label = {
-                                Text(
-                                    status.name.replace("_", " ")
-                                        .lowercase()
-                                        .replaceFirstChar {
-                                            if (it.isLowerCase()) it.titlecase(
-                                                Locale.getDefault()
-                                            ) else it.toString()
-                                        }
-                                )
+                                Text(status.toName())
                             }
                         )
                     }

@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.bd.data.model.ResultCodes
 import com.bd.data.model.order.FilterOrderData
 import com.bd.data.repository.order.OrderRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class DeliveryViewModel(
@@ -17,6 +19,12 @@ class DeliveryViewModel(
 
     private val _uiState = MutableStateFlow(DeliveryUiState())
     val uiState: StateFlow<DeliveryUiState> = _uiState.asStateFlow()
+
+    private val periodicRefreshIntervalMs: Long = 20_000L
+
+    init {
+        startPeriodicDataFetching()
+    }
 
     fun getDeliveryOrders() {
         viewModelScope.launch {
@@ -45,6 +53,18 @@ class DeliveryViewModel(
         _uiState.update { it.copy(filterData = newFilter) }
         if (needsRefresh) {
             getDeliveryOrders()
+        }
+    }
+
+    private fun startPeriodicDataFetching() {
+        viewModelScope.launch {
+            while (isActive) {
+                delay(periodicRefreshIntervalMs)
+
+                if (!_uiState.value.loading) {
+                    getDeliveryOrders()
+                }
+            }
         }
     }
 }

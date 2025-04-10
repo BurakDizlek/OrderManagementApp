@@ -75,9 +75,6 @@
     <string name="list">List</string>
     <string name="map">Map</string>
     <string name="reject">Reject</string>
-    <string name="order_id_prefix">Order id:</string>
-    <string name="recipient_prefix">Recipient:</string>
-    <string name="status_prefix">Status:</string>
     <string name="no_orders_with_location">No orders with location.</string>
     <string name="recipient">Recipient</string>
     <string name="address_loading">Address loading</string>
@@ -96,4 +93,9 @@
     <string name="default_notification_channel_id" translatable="false">order_updates_channel</string>
     <string name="order_notification_channel_name">Order Updates</string>
     <string name="cart_is_empty">Cart is empty</string>
+    <string name="order_status_open">Open</string>
+    <string name="order_status_on_the_way">On the way</string>
+    <string name="order_status_cancelled">Cancelled</string>
+    <string name="order_status_rejected">Rejected</string>
+    <string name="order_status_completed">Completed</string>
 </resources>
