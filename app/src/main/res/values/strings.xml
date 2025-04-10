@@ -17,6 +17,8 @@
     <string name="orders_bottom_bar_title">Orders</string>
     <string name="delivery_list_bottom_bar_title">List</string>
     <string name="delivery_map_bottom_bar_title">Map</string>
+    <string name="profile_bottom_bar_title">Profile</string>
+    <string name="profile_screen_title">Profile</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>">
     <string name="login_screen_title">Login</string>">
@@ -98,4 +100,6 @@
     <string name="order_status_cancelled">Cancelled</string>
     <string name="order_status_rejected">Rejected</string>
     <string name="order_status_completed">Completed</string>
+    <string name="you_are_not_logged_in_yet">You are not logged in yet.</string>
+    <string name="logout">Logout</string>">
 </resources>
