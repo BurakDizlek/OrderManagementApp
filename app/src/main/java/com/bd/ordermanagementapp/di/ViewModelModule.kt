@@ -11,6 +11,7 @@ import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryVi
 import com.bd.ordermanagementapp.screens.orders.create.location.LocationPickerViewModel
 import com.bd.ordermanagementapp.screens.orders.details.OrderDetailsViewModel
 import com.bd.ordermanagementapp.screens.orders.list.OrdersViewModel
+import com.bd.ordermanagementapp.screens.profile.ProfileViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -26,4 +27,5 @@ val viewModelModule = module {
     viewModelOf(::OrderDetailsViewModel)
     viewModelOf(::DeliveryViewModel)
     viewModelOf(::MainActivityViewModel)
+    viewModelOf(::ProfileViewModel)
 }

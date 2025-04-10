@@ -46,7 +46,8 @@ class UserBottomBarManagerImpl(sessionManager: SessionManager) : UserBottomBarMa
             BottomNavItem(BottomBarScreen.Cart, cartVisibility, cartCount),
             BottomNavItem(BottomBarScreen.Orders, ordersVisibility),
             BottomNavItem(BottomBarScreen.DeliveryList, deliveryVisibility),
-            BottomNavItem(BottomBarScreen.DeliveryMap, deliveryVisibility)
+            BottomNavItem(BottomBarScreen.DeliveryMap, deliveryVisibility),
+            BottomNavItem(BottomBarScreen.Profile, true)
         )
     }
 

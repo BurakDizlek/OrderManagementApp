@@ -5,6 +5,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bd.ordermanagementapp.R
@@ -12,7 +13,7 @@ import com.bd.ordermanagementapp.R
 sealed class BottomBarScreen(
     val route: String,
     val titleId: Int,
-    val icon: ImageVector
+    val icon: ImageVector,
 ) {
     object Home : BottomBarScreen(
         route = "home",
@@ -42,5 +43,11 @@ sealed class BottomBarScreen(
         route = "delivery_map",
         titleId = R.string.delivery_map_bottom_bar_title,
         icon = Icons.Default.Map
+    )
+
+    object Profile : BottomBarScreen(
+        route = "profile",
+        titleId = R.string.profile_bottom_bar_title,
+        icon = Icons.Default.Person
     )
 }

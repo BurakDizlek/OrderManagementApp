@@ -16,6 +16,7 @@ import com.bd.ordermanagementapp.screens.login.loginNavigationGraph
 import com.bd.ordermanagementapp.screens.orders.create.createOrderNavigationGraph
 import com.bd.ordermanagementapp.screens.orders.details.orderDetailsNavigationGraph
 import com.bd.ordermanagementapp.screens.orders.list.OrdersScreen
+import com.bd.ordermanagementapp.screens.profile.ProfileScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,6 +61,10 @@ fun BottomNavGraph(
                 navController = navController,
                 parentPadding = padding
             )
+        }
+
+        composable(route = BottomBarScreen.Profile.route) {
+            ProfileScreen(navController = navController)
         }
 
         loginNavigationGraph(navController)
