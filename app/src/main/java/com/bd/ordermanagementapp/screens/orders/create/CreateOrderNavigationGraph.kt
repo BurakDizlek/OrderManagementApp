@@ -1,7 +1,7 @@
 package com.bd.ordermanagementapp.screens.orders.create
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.bd.ordermanagementapp.screens.orders.create.detail.OrderDetailEntryScreen
@@ -10,7 +10,7 @@ import com.bd.ordermanagementapp.screens.orders.create.success.CreateOrderSucces
 
 
 fun NavGraphBuilder.createOrderNavigationGraph(
-    navController: NavController,
+    navController: NavHostController,
 ) { //consider having navigation.
     composable<CreateOrderRoute.Starter> { navBackStackEntry ->
         LocationPickerScreen(navController = navController, data = navBackStackEntry.toRoute())

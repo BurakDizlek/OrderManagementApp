@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,6 +73,10 @@ fun DeliveryMapScreen(
     val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
 
     var selectedMarkerOrderId by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getDeliveryOrders()
+    }
 
     Scaffold(
         topBar = { ToolbarWithTitle(title = stringResource(id = R.string.delivery_map_screen_title)) }

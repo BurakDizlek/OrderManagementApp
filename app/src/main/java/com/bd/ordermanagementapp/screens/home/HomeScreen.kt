@@ -44,6 +44,7 @@ import com.bd.ordermanagementapp.screens.home.campaign.navigateToCampaignDetails
 import com.bd.ordermanagementapp.screens.home.common.HomeCommonView
 import com.bd.ordermanagementapp.screens.home.common.MenuItemView
 import com.bd.ordermanagementapp.ui.components.ErrorView
+import com.bd.ordermanagementapp.ui.components.NotificationPermissionHandler
 import com.bd.ordermanagementapp.ui.components.ProgressView
 import com.bd.ordermanagementapp.ui.extensions.largePadding
 import com.bd.ordermanagementapp.ui.theme.DustyWhite
@@ -138,6 +139,8 @@ fun HomeScreen(
             }
         }
         HomeCommonView(commonState, viewModel, navController)
+
+        NotificationPermissionHandler()
     }
 }
 

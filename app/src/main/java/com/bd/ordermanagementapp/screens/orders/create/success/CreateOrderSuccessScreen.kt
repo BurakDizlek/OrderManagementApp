@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.bd.ordermanagementapp.R
 import com.bd.ordermanagementapp.screens.main.BottomBarScreen
 import com.bd.ordermanagementapp.screens.main.GraphRoute
@@ -24,7 +24,7 @@ import com.bd.ordermanagementapp.ui.extensions.mediumPadding
 
 
 @Composable
-fun CreateOrderSuccessScreen(data: CreateOrderRoute.Success, navController: NavController) {
+fun CreateOrderSuccessScreen(data: CreateOrderRoute.Success, navController: NavHostController) {
     Scaffold(
         topBar = {
             ToolbarWithTitle(title = stringResource(R.string.create_order_success_title))
@@ -52,11 +52,7 @@ fun CreateOrderSuccessScreen(data: CreateOrderRoute.Success, navController: NavC
                 )
                 Button(
                     onClick = {
-                        navController.navigate(BottomBarScreen.Orders.route) {
-                            popUpTo(GraphRoute.BOTTOM_BAR) {
-                                inclusive = false
-                            }
-                        }
+                        navigateToOrders(navController)
                     }, Modifier
                         .fillMaxWidth()
                         .mediumPadding()
@@ -69,5 +65,14 @@ fun CreateOrderSuccessScreen(data: CreateOrderRoute.Success, navController: NavC
 
     BackHandler(enabled = true) {
         //preventing back press
+        navigateToOrders(navController)
+    }
+}
+
+private fun navigateToOrders(navController: NavHostController) {
+    navController.navigate(BottomBarScreen.Orders.route) {
+        popUpTo(GraphRoute.BOTTOM_BAR) {
+            inclusive = false
+        }
     }
 }

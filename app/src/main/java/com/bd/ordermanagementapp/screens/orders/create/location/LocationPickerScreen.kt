@@ -46,7 +46,7 @@ fun LocationPickerScreen(
         rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val pickedLocation by viewModel.pickedLocation
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(locationPermissionState.status.isGranted) {
         viewModel.initialize(context)
         if (locationPermissionState.status.isGranted) {
             viewModel.setPickedLocationWithCurrent()
