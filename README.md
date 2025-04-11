@@ -72,5 +72,6 @@ The application follows the **MVVM (Model-View-ViewModel)** architectural patter
 
 ## Setup
 
-1.  Clone the repository.
-2.  Build and run the application.
+1. Clone this repository: ```git clone https://github.com/BurakDizlek/OrderManagementApp.git ```
+2. Open the project in Android Studio.
+3. Build and run the app.
