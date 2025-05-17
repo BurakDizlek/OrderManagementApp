@@ -1,5 +1,6 @@
 package com.bd.network.service.geocoding
 
+import com.bd.network.NetworkConstants.mapsKey
 import com.bd.network.errors.handleErrors
 import com.bd.network.model.geocoding.GeocodingResponse
 import io.ktor.client.HttpClient
@@ -19,10 +20,7 @@ class GeocodingServiceImpl(private val client: HttpClient) : GeocodingService {
             client.get(GEOCODING_URL) {
                 url {
                     parameters.append("latlng", "$latitude,$longitude")
-                    parameters.append(
-                        "key",
-                        "AIzaSyAsYnX47kTOswhdcZfCcBbGqRiQUw0FApk"
-                    ) //todo get it from backend before live.
+                    parameters.append("key", mapsKey)
                 }
                 contentType(ContentType.Application.Json)
             }

@@ -1,17 +1,35 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
 
+val privatePropertiesFile = rootProject.file("privates.properties")
+val privateProperties = Properties()
+
+if (privatePropertiesFile.exists()) {
+    privatePropertiesFile.inputStream().use { stream ->
+        privateProperties.load(stream)
+    }
+}
+
 android {
     namespace = "com.bd.network"
     compileSdk = 35
+    
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "mapsKey", privateProperties.getProperty("mapsKey") )
+        buildConfigField("String", "baseUrl", privateProperties.getProperty("baseUrl") )
     }
 
     buildTypes {
